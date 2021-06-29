@@ -1,6 +1,7 @@
 type HomePageProps = {};
 
-const HomePage: React.FC<HomePageProps> = () => {
+const HomePage: React.FC<HomePageProps> = props => {
+  console.log(props);
   return (
     <div>
       <p>Hello</p>
