@@ -33,9 +33,8 @@ export async function getStaticProps() {
 
   return {
     props: {
-      // initialApolloState: apolloClient.cache.extract(),
+      initialApolloState: apolloClient.cache.extract(),
       pizzas: data,
-      logo,
     },
   };
 }
