@@ -34,6 +34,15 @@ export default extendTheme({
         width: '90%',
       },
     },
+    Button: {
+      baseStyle: {
+        rounded: 'full',
+        fontFamily: 'Josefin Sans, sans-serif',
+      },
+      defaultProps: {
+        colorScheme: 'red',
+      },
+    },
   },
   breakpoints,
 });

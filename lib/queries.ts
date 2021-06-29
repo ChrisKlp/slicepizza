@@ -11,6 +11,19 @@ export const LOGO = gql`
   }
 `;
 
+export const HERO = gql`
+  query Hero {
+    hero {
+      title
+      description
+      image {
+        formats
+        url
+      }
+    }
+  }
+`;
+
 export const ALL_PIZZAS = gql`
   query AllPizzas {
     pizzas {
