@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import Image from 'next/image';
-import { TCartItem } from './CartContext';
+import { TCartItem, useCart } from './CartContext';
 import formatMoney from 'lib/formatMoney';
 import { RiCloseLine } from 'react-icons/ri';
 import { BiPlus, BiMinus } from 'react-icons/bi';
@@ -18,6 +18,7 @@ type CartItemProps = {
 };
 
 const CartItem: React.FC<CartItemProps> = ({ data }) => {
+  const { incrementQuantity, decrementQuantity, removeFromCart } = useCart();
   return (
     <>
       <HStack w="full">
@@ -39,6 +40,7 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
               variant="link"
               color="gray.500"
               aria-label="delete item"
+              onClick={() => removeFromCart(data.id)}
             />
           </HStack>
           <HStack mt={2}>
@@ -49,6 +51,8 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
               aria-label="increment item counter"
               rounded={6}
               size="sm"
+              disabled={data.quantity <= 1}
+              onClick={() => decrementQuantity(data.id)}
             />
             <Text>{data.quantity}</Text>
             <IconButton
@@ -58,6 +62,8 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
               aria-label="decrement item counter"
               rounded={6}
               size="sm"
+              disabled={data.quantity >= 10}
+              onClick={() => incrementQuantity(data.id)}
             />
           </HStack>
         </Box>

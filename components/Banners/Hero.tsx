@@ -2,12 +2,31 @@ import { Box, Button, Flex, Heading, VStack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { Hero as THero } from 'types/Hero';
 import { FiShoppingCart } from 'react-icons/fi';
+import { useCart } from 'components/Cart/CartContext';
+import formatCartItem from 'lib/formatCartItem';
 
 type HeroProps = {
   data: THero;
 };
 
 const Hero: React.FC<HeroProps> = ({ data }) => {
+  const { addToCart, incrementQuantity, state } = useCart();
+
+  const existingItem = state.items.find(
+    item => item.id === data.hero?.pizza?.id
+  );
+
+  const handleAddClick = () => {
+    if (!data?.hero?.pizza) return;
+
+    if (existingItem) {
+      return incrementQuantity(data.hero.pizza.id);
+    }
+
+    const item = formatCartItem(data.hero.pizza);
+    addToCart(item);
+  };
+
   return (
     <Flex
       align={{ base: 'flex-end', lg: 'center' }}
@@ -56,7 +75,13 @@ const Hero: React.FC<HeroProps> = ({ data }) => {
         <Text color="white" pb={4}>
           {data.hero?.description}
         </Text>
-        <Button rightIcon={<FiShoppingCart />} px={8} h={12}>
+        <Button
+          rightIcon={<FiShoppingCart />}
+          px={8}
+          h={12}
+          onClick={handleAddClick}
+          disabled={existingItem && existingItem.quantity >= 99}
+        >
           Add to Cart
         </Button>
       </VStack>

@@ -19,9 +19,15 @@ type PizzaCardProps = {
 };
 
 const PizzaCard: React.FC<PizzaCardProps> = ({ data }) => {
-  const { addToCart } = useCart();
+  const { addToCart, incrementQuantity, state } = useCart();
+
+  const existingItem = state.items.find(item => item.id === data.id);
 
   const handleAddClick = () => {
+    if (existingItem) {
+      return incrementQuantity(data.id);
+    }
+
     const item = formatCartItem(data);
     addToCart(item);
   };
@@ -97,10 +103,18 @@ const PizzaCard: React.FC<PizzaCardProps> = ({ data }) => {
             colSpan={{ base: 2, md: 1 }}
             justifySelf={['end', null, 'unset']}
           >
-            <Button size="sm" display={['block', 'none']}>
+            <Button
+              size="sm"
+              display={['block', 'none']}
+              disabled={existingItem && existingItem.quantity >= 99}
+            >
               Add
             </Button>
-            <Button display={['none', 'block']} onClick={handleAddClick}>
+            <Button
+              display={['none', 'block']}
+              onClick={handleAddClick}
+              disabled={existingItem && existingItem.quantity >= 99}
+            >
               Add to Cart
             </Button>
           </GridItem>

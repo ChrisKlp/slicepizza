@@ -16,6 +16,14 @@ export const HERO = gql`
     hero {
       title
       description
+      pizza {
+        id
+        image {
+          formats
+        }
+        price
+        title
+      }
       image {
         formats
         url

@@ -1,7 +1,10 @@
 import { TCartItem } from 'components/Cart/CartContext';
 import { AllPizzas_pizzas } from 'types/AllPizzas';
+import { Hero_hero_pizza } from 'types/Hero';
 
-const formatCartItem = (data: AllPizzas_pizzas): TCartItem => {
+const formatCartItem = (
+  data: AllPizzas_pizzas | Hero_hero_pizza
+): TCartItem => {
   return {
     id: data.id,
     imageUrl: data.image?.formats.thumbnail.url,
