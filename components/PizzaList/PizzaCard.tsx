@@ -11,12 +11,21 @@ import {
 import { AllPizzas_pizzas } from 'types/AllPizzas';
 import Image from 'next/image';
 import formatMoney from 'lib/formatMoney';
+import { useCart } from 'components/Cart/CartContext';
+import formatCartItem from 'lib/formatCartItem';
 
 type PizzaCardProps = {
   data: AllPizzas_pizzas;
 };
 
 const PizzaCard: React.FC<PizzaCardProps> = ({ data }) => {
+  const { addToCart } = useCart();
+
+  const handleAddClick = () => {
+    const item = formatCartItem(data);
+    addToCart(item);
+  };
+
   return (
     <Box bg="white" p={{ md: 6 }} rounded={{ md: 8 }}>
       <Flex
@@ -91,7 +100,9 @@ const PizzaCard: React.FC<PizzaCardProps> = ({ data }) => {
             <Button size="sm" display={['block', 'none']}>
               Add
             </Button>
-            <Button display={['none', 'block']}>Add to Cart</Button>
+            <Button display={['none', 'block']} onClick={handleAddClick}>
+              Add to Cart
+            </Button>
           </GridItem>
         </Grid>
       </Flex>
