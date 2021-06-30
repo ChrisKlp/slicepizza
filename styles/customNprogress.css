@@ -1,0 +1,12 @@
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  background: red;
+  z-index: 9999;
+}
+
+#nprogress .spinner {
+  display: none;
+}

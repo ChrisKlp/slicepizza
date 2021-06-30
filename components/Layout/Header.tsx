@@ -3,11 +3,14 @@ import {
   Avatar,
   Box,
   Container,
+  Flex,
   HStack,
   IconButton,
   useDisclosure,
+  Text,
 } from '@chakra-ui/react';
 import Cart from 'components/Cart/Cart';
+import { useCart } from 'components/Cart/CartContext';
 import { LOGO } from 'lib/queries';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,24 +22,29 @@ type NavigationProps = {};
 
 const Navigation: React.FC<NavigationProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { state } = useCart();
   const { data } = useQuery<Logo>(LOGO);
 
   return (
-    <>
-      <Container as="header">
-        <HStack
-          justify="space-between"
-          align="center"
-          h={[20, null, 24]}
-          w="full"
-        >
+    <Box
+      as="header"
+      h={[20, null, 24]}
+      w="full"
+      position="sticky"
+      bg="#F6F5F1"
+      top={0}
+      left={0}
+      zIndex="sticky"
+    >
+      <Container h="full">
+        <HStack justify="space-between" align="center" h="full" w="full">
           <Box
             h={['40px', null, '60px']}
             w={['140px', null, '208px']}
             position="relative"
           >
-            <Link href="/">
-              {data?.logo?.image?.url && (
+            {data?.logo?.image?.url && (
+              <Link href="/">
                 <a>
                   <Image
                     src={data.logo.image.url}
@@ -45,8 +53,8 @@ const Navigation: React.FC<NavigationProps> = () => {
                     objectFit="contain"
                   />
                 </a>
-              )}
-            </Link>
+              </Link>
+            )}
           </Box>
           <HStack align="center" h="full">
             <Link href="/profile" passHref>
@@ -60,18 +68,36 @@ const Navigation: React.FC<NavigationProps> = () => {
                 bg="white"
               />
             </Link>
-            <IconButton
-              icon={<FiShoppingCart />}
-              aria-label="cart button"
-              rounded="full"
-              colorScheme="red"
-              onClick={onOpen}
-            />
+            <Box position="relative">
+              <IconButton
+                icon={<FiShoppingCart />}
+                aria-label="cart button"
+                rounded="full"
+                colorScheme="red"
+                onClick={onOpen}
+              />
+              {state.items.length > 0 && (
+                <Flex
+                  position="absolute"
+                  w="18px"
+                  h="18px"
+                  bg="yellow.400"
+                  bottom="-5px"
+                  right={0}
+                  rounded="full"
+                  justify="center"
+                  align="center"
+                  pointerEvents="none"
+                >
+                  <Text fontSize="xs">{state.items.length}</Text>
+                </Flex>
+              )}
+            </Box>
           </HStack>
         </HStack>
       </Container>
       <Cart isOpen={isOpen} onClose={onClose} />
-    </>
+    </Box>
   );
 };
 

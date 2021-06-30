@@ -41,8 +41,8 @@ const PizzaCard: React.FC<PizzaCardProps> = ({ data }) => {
       >
         <Box
           position="relative"
-          w="120px"
-          h="120px"
+          w={['100px', '120px']}
+          h={['100px', '120px']}
           flexShrink={0}
           display={{ md: 'none' }}
         >
@@ -61,7 +61,7 @@ const PizzaCard: React.FC<PizzaCardProps> = ({ data }) => {
         <Grid
           ml={[2, null, 0]}
           templateRows={{ base: 'repeat(3, auto)', md: 'auto 1fr auto auto' }}
-          templateColumns={{ base: 'repeat(2, auto)', md: '1fr' }}
+          templateColumns={{ base: 'auto 65px', md: '1fr' }}
           w="full"
           justifyItems={{ md: 'center' }}
           gap={{ base: 2, md: 3 }}
@@ -106,6 +106,7 @@ const PizzaCard: React.FC<PizzaCardProps> = ({ data }) => {
             <Button
               size="sm"
               display={['block', 'none']}
+              onClick={handleAddClick}
               disabled={existingItem && existingItem.quantity >= 99}
             >
               Add

@@ -9,10 +9,10 @@ import {
   DrawerOverlay,
   Heading,
   HStack,
-  useDisclosure,
   VStack,
 } from '@chakra-ui/react';
 import formatMoney from 'lib/formatMoney';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useCart } from './CartContext';
 import CartItem from './CartItem';
@@ -24,6 +24,12 @@ type CartProps = {
 
 const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
   const { state } = useCart();
+  const router = useRouter();
+
+  const handleCheckout = () => {
+    onClose();
+    router.push('/checkout');
+  };
 
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
@@ -50,7 +56,13 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                 {formatMoney(state.total)}
               </Heading>
             </HStack>
-            <Button w="full">CHECKOUT</Button>
+            <Button
+              w="full"
+              disabled={!state.items.length}
+              onClick={handleCheckout}
+            >
+              CHECKOUT
+            </Button>
           </VStack>
         </DrawerFooter>
       </DrawerContent>

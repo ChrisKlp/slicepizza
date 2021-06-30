@@ -6,6 +6,8 @@ import type { AppContext, AppProps } from 'next/app';
 import { NextRouter } from 'next/dist/client/router';
 import Router from 'next/router';
 import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
+import 'styles/customNprogress.css';
 import theme from 'styles/theme';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
