@@ -2,7 +2,7 @@ import { initializeApollo } from 'lib/apolloClient';
 import { ALL_PIZZAS, FOOTER_BANNER, HERO, LOGO } from 'lib/queries';
 import { AllPizzas } from 'types/AllPizzas';
 import { Logo } from 'types/Logo';
-import { Hero, FooterBanner } from 'components';
+import { Hero, FooterBanner, PizzaList } from 'components';
 import { Hero as THero } from 'types/Hero';
 import { FooterBanner as TFooterBanner } from 'types/FooterBanner';
 
@@ -17,6 +17,7 @@ const HomePage: React.FC<HomePageProps> = props => {
   return (
     <>
       <Hero data={props.hero} />
+      <PizzaList data={props.pizzas} />
       <FooterBanner data={props.footerBanner} />
     </>
   );
@@ -27,7 +28,7 @@ export default HomePage;
 export async function getStaticProps() {
   const apolloClient = initializeApollo();
 
-  const { data } = await apolloClient.query({
+  const { data: pizzas } = await apolloClient.query({
     query: ALL_PIZZAS,
   });
 
@@ -46,7 +47,7 @@ export async function getStaticProps() {
   return {
     props: {
       initialApolloState: apolloClient.cache.extract(),
-      pizzas: data,
+      pizzas,
       hero,
       footerBanner,
     },

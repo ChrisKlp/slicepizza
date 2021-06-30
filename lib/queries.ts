@@ -44,6 +44,10 @@ export const ALL_PIZZAS = gql`
       price
       slug
       toppings
+      image {
+        formats
+        url
+      }
     }
   }
 `;

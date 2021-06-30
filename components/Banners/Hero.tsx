@@ -26,7 +26,7 @@ const Hero: React.FC<HeroProps> = ({ data }) => {
       bgSize={['cover', null, null, '1440px', '1800px']}
       bgRepeat="no-repeat"
       bgPosition={['center', null, 'left']}
-      rounded={[0, null, 12]}
+      rounded={{ md: 12 }}
       overflow="hidden"
       zIndex={0}
     >

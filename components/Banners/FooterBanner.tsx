@@ -15,6 +15,7 @@ const FooterBanner: React.FC<FooterBannerProps> = ({ data }) => {
       w={['full', null, '90%']}
       maxW="1440px"
       mx={[0, null, 'auto']}
+      mt={{ md: 8 }}
       position="relative"
       bgImage={[
         `url('${
@@ -29,7 +30,7 @@ const FooterBanner: React.FC<FooterBannerProps> = ({ data }) => {
       bgSize={['cover', null, null, '1440px']}
       bgRepeat="no-repeat"
       bgPosition={['center', null, 'left']}
-      rounded={[0, null, 12]}
+      rounded={{ md: 12 }}
       overflow="hidden"
       zIndex={0}
     >
@@ -37,11 +38,11 @@ const FooterBanner: React.FC<FooterBannerProps> = ({ data }) => {
         align="flex-start"
         p={[8, 12, 14]}
         ml={{ base: 0, lg: 8 }}
-        maxW={{ base: 80, lg: 'xl' }}
+        maxW={{ base: 80, lg: 96 }}
       >
         <Heading
           color="white"
-          fontSize={['4xl', null, '5xl', '6xl']}
+          fontSize={['4xl', null, '5xl']}
           pb={4}
           lineHeight="110%"
         >
