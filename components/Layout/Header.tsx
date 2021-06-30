@@ -4,7 +4,7 @@ import { LOGO } from 'lib/queries';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { FiShoppingCart } from 'react-icons/fi';
+import { FiShoppingCart, FiUser } from 'react-icons/fi';
 import { Logo } from 'types/Logo';
 
 type NavigationProps = {};
@@ -40,7 +40,15 @@ const Navigation: React.FC<NavigationProps> = () => {
         </Box>
         <HStack align="center" h="full">
           <Link href="/profile" passHref>
-            <Avatar as="a" name="Chris Klp" size="md" w={10} h={10} />
+            <Avatar
+              as="a"
+              icon={<FiUser size={18} />}
+              size="sm"
+              w={10}
+              h={10}
+              fontSize="12px"
+              bg="white"
+            />
           </Link>
           <IconButton
             icon={<FiShoppingCart />}

@@ -24,6 +24,18 @@ export const HERO = gql`
   }
 `;
 
+export const FOOTER_BANNER = gql`
+  query FooterBanner {
+    footerBanner {
+      title
+      image {
+        formats
+        url
+      }
+    }
+  }
+`;
+
 export const ALL_PIZZAS = gql`
   query AllPizzas {
     pizzas {

@@ -10,7 +10,7 @@ type HeroProps = {
 const Hero: React.FC<HeroProps> = ({ data }) => {
   return (
     <Flex
-      align={['flex-end', null, null, 'center']}
+      align={{ base: 'flex-end', lg: 'center' }}
       h={['400px', null, '450px']}
       w={['full', null, '90%']}
       maxW="1440px"
@@ -38,21 +38,25 @@ const Hero: React.FC<HeroProps> = ({ data }) => {
         h="full"
         bgGradient={'linear(to-b, rgba(0,0,0,0), rgba(0,0,0,0.6))'}
         zIndex={-1}
-        display={[null, null, null, 'none']}
+        display={{ lg: 'none' }}
       />
       <VStack
         align="flex-start"
         p={[8, 12, 14]}
-        ml={[0, null, null, 8]}
+        ml={{ base: 0, lg: 8 }}
         maxW={96}
       >
-        <Heading color="white" fontSize={['4xl', null, '5xl', '6xl']}>
+        <Heading
+          color="white"
+          fontSize={['4xl', null, '5xl', '6xl']}
+          lineHeight="110%"
+        >
           {data.hero?.title}
         </Heading>
         <Text color="white" pb={4}>
           {data.hero?.description}
         </Text>
-        <Button rightIcon={<FiShoppingCart />} px={8} pt={5} pb={4} h={12}>
+        <Button rightIcon={<FiShoppingCart />} px={8} h={12}>
           Add to Cart
         </Button>
       </VStack>
