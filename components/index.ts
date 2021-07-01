@@ -5,3 +5,4 @@ export { default as PizzaList } from 'components/PizzaList/PizzaList';
 export { default as Cart } from 'components/Cart/Cart';
 export { default as CheckoutForm } from 'components/Checkout/CheckoutForm';
 export { default as CheckoutList } from 'components/Checkout/CheckoutList';
+export { default as OrderConfirmation } from 'components/Checkout/OrderConfirmation';

@@ -18,6 +18,7 @@ export interface Hero_hero_pizza {
   image: Hero_hero_pizza_image | null;
   price: number;
   title: string;
+  toppings: string;
 }
 
 export interface Hero_hero_image {

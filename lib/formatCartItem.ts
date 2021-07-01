@@ -11,6 +11,7 @@ const formatCartItem = (
     price: data.price,
     quantity: 1,
     title: data.title,
+    toppings: data.toppings,
   };
 };
 

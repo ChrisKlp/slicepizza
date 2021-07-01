@@ -9,12 +9,13 @@ import {
 export type TCartItem = {
   id: string;
   title: string;
+  toppings: string;
   price: number;
   imageUrl: string;
   quantity: number;
 };
 
-type TState = {
+export type TState = {
   items: TCartItem[];
   shipping: number;
   total: number;
@@ -31,7 +32,8 @@ type TAction =
   | { type: 'REMOVE_ITEM'; payload: string }
   | { type: 'INCREMENT'; payload: string }
   | { type: 'DECREMENT'; payload: string }
-  | { type: 'CALC_TOTAL' };
+  | { type: 'CALC_TOTAL' }
+  | { type: 'CLEAN_CART' };
 
 type TContext = {
   state: TState;
@@ -39,6 +41,7 @@ type TContext = {
   removeFromCart: (id: string) => void;
   incrementQuantity: (id: string) => void;
   decrementQuantity: (id: string) => void;
+  cleanCart: () => void;
 };
 
 const CartContext = createContext({});
@@ -84,6 +87,8 @@ const reducer: React.Reducer<TState, TAction> = (state, action) => {
           0
         ),
       };
+    case 'CLEAN_CART':
+      return { ...initialState };
     default:
       return state;
   }
@@ -128,6 +133,10 @@ export const CartProvider: React.FC = ({ children }) => {
     [dispatch]
   );
 
+  const cleanCart = useCallback(() => {
+    dispatch({ type: 'CLEAN_CART' });
+  }, [dispatch]);
+
   return (
     <CartContext.Provider
       value={{
@@ -136,6 +145,7 @@ export const CartProvider: React.FC = ({ children }) => {
         removeFromCart,
         incrementQuantity,
         decrementQuantity,
+        cleanCart,
       }}
     >
       {children}

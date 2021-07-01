@@ -1,14 +1,15 @@
 import { Box, Heading, SimpleGrid } from '@chakra-ui/react';
 import { TFormInputs } from 'lib/formSchema';
 import React from 'react';
-import { UseFormRegister } from 'react-hook-form';
+import { DeepMap, FieldError, UseFormRegister } from 'react-hook-form';
 import FormInput from './FormInput';
 
 type CheckoutFormProps = {
   register: UseFormRegister<TFormInputs>;
+  errors: DeepMap<TFormInputs, FieldError>;
 };
 
-const CheckoutForm: React.FC<CheckoutFormProps> = ({ register }) => {
+const CheckoutForm: React.FC<CheckoutFormProps> = ({ register, errors }) => {
   return (
     <>
       <Heading mb={8} letterSpacing={-1} color="red.900">
@@ -31,6 +32,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ register }) => {
             type="text"
             name="name"
             register={register}
+            errors={errors}
           />
           <FormInput
             label="Email address"
@@ -38,13 +40,15 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ register }) => {
             type="email"
             name="email"
             register={register}
+            errors={errors}
           />
           <FormInput
             label="Phone number"
             placeholder="+1 202-555-0136"
-            type="tel"
+            type="number"
             name="phone"
             register={register}
+            errors={errors}
           />
         </SimpleGrid>
       </Box>
@@ -65,6 +69,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ register }) => {
           name="address"
           mb={5}
           register={register}
+          errors={errors}
         />
         <SimpleGrid columns={{ md: 2 }} spacing={5}>
           <FormInput
@@ -73,6 +78,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ register }) => {
             type="text"
             name="code"
             register={register}
+            errors={errors}
           />
           <FormInput
             label="City"
@@ -80,6 +86,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ register }) => {
             type="text"
             name="city"
             register={register}
+            errors={errors}
           />
         </SimpleGrid>
       </Box>

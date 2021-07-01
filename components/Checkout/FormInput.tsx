@@ -1,33 +1,36 @@
 import {
   FormControl,
+  FormControlProps,
+  FormErrorMessage,
   FormLabel,
   Input,
-  FormErrorMessage,
-  FormControlProps,
-  InputProps,
-  FormLabelProps,
-  FormErrorMessageProps,
 } from '@chakra-ui/react';
 import { TFormInputs } from 'lib/formSchema';
 import React from 'react';
-import { UseFormRegister } from 'react-hook-form';
-
-type FormProps = FormControlProps &
-  FormLabelProps &
-  InputProps &
-  FormErrorMessageProps;
+import { DeepMap, FieldError, UseFormRegister } from 'react-hook-form';
 
 type FormInputProps = {
   register: UseFormRegister<TFormInputs>;
+  errors: DeepMap<TFormInputs, FieldError>;
   name: keyof TFormInputs;
-} & FormProps;
+  placeholder: string;
+  type: string;
+  label: string;
+} & FormControlProps;
 
-const FormInput: React.FC<FormInputProps> = props => {
+const FormInput: React.FC<FormInputProps> = ({
+  name,
+  placeholder,
+  label,
+  register,
+  errors,
+  ...props
+}) => {
   return (
-    <FormControl {...props}>
-      <FormLabel htmlFor={props.name}>{props.label}</FormLabel>
-      <Input placeholder={props.placeholder} {...props.register(props.name)} />
-      <FormErrorMessage></FormErrorMessage>
+    <FormControl id={name} isInvalid={!!errors[name]} {...props}>
+      <FormLabel htmlFor={name}>{label}</FormLabel>
+      <Input placeholder={placeholder} {...register(name)} type="type" />
+      <FormErrorMessage>{errors[name]?.message}</FormErrorMessage>
     </FormControl>
   );
 };

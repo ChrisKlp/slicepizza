@@ -23,6 +23,7 @@ export const HERO = gql`
         }
         price
         title
+        toppings
       }
       image {
         formats
