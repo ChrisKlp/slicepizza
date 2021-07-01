@@ -22,7 +22,7 @@ type TState = {
 
 const initialState: TState = {
   items: [],
-  shipping: 50,
+  shipping: 10,
   total: 0,
 };
 

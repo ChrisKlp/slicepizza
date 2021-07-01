@@ -1,19 +1,16 @@
-import {
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  SimpleGrid,
-  Input,
-  Box,
-  Heading,
-} from '@chakra-ui/react';
+import { Box, Heading, SimpleGrid } from '@chakra-ui/react';
+import { TFormInputs } from 'lib/formSchema';
 import React from 'react';
+import { UseFormRegister } from 'react-hook-form';
+import FormInput from './FormInput';
 
-type CheckoutFormProps = {};
+type CheckoutFormProps = {
+  register: UseFormRegister<TFormInputs>;
+};
 
-const CheckoutForm: React.FC<CheckoutFormProps> = () => {
+const CheckoutForm: React.FC<CheckoutFormProps> = ({ register }) => {
   return (
-    <form>
+    <>
       <Heading mb={8} letterSpacing={-1} color="red.900">
         Checkout
       </Heading>
@@ -28,21 +25,27 @@ const CheckoutForm: React.FC<CheckoutFormProps> = () => {
           Billing details
         </Heading>
         <SimpleGrid columns={{ md: 2 }} spacing={5}>
-          <FormControl>
-            <FormLabel htmlFor="name">Name</FormLabel>
-            <Input type="text" name="name" placeholder="John Doe" />
-            <FormErrorMessage></FormErrorMessage>
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="email">Email address</FormLabel>
-            <Input type="email" name="email" placeholder="john@mail.com" />
-            <FormErrorMessage></FormErrorMessage>
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="phone">Phone number</FormLabel>
-            <Input type="tel" name="phone" placeholder="+1 202-555-0136" />
-            <FormErrorMessage></FormErrorMessage>
-          </FormControl>
+          <FormInput
+            label="Name"
+            placeholder="John Doe"
+            type="text"
+            name="name"
+            register={register}
+          />
+          <FormInput
+            label="Email address"
+            placeholder="john@mail.com"
+            type="email"
+            name="email"
+            register={register}
+          />
+          <FormInput
+            label="Phone number"
+            placeholder="+1 202-555-0136"
+            type="tel"
+            name="phone"
+            register={register}
+          />
         </SimpleGrid>
       </Box>
       <Box>
@@ -55,29 +58,32 @@ const CheckoutForm: React.FC<CheckoutFormProps> = () => {
         >
           SHIPPING INFO
         </Heading>
-        <FormControl mb={5}>
-          <FormLabel htmlFor="address">Address</FormLabel>
-          <Input
-            type="text"
-            name="address"
-            placeholder="1137 Williams Avenue"
-          />
-          <FormErrorMessage></FormErrorMessage>
-        </FormControl>
+        <FormInput
+          label="Address"
+          placeholder="1137 Williams Avenue"
+          type="text"
+          name="address"
+          mb={5}
+          register={register}
+        />
         <SimpleGrid columns={{ md: 2 }} spacing={5}>
-          <FormControl>
-            <FormLabel htmlFor="code">Zip Code</FormLabel>
-            <Input type="text" name="code" placeholder="10001" />
-            <FormErrorMessage></FormErrorMessage>
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="city">City</FormLabel>
-            <Input type="text" name="city" placeholder="New York" />
-            <FormErrorMessage></FormErrorMessage>
-          </FormControl>
+          <FormInput
+            label="Zip Code"
+            placeholder="10001"
+            type="text"
+            name="code"
+            register={register}
+          />
+          <FormInput
+            label="City"
+            placeholder="Bialystok"
+            type="text"
+            name="city"
+            register={register}
+          />
         </SimpleGrid>
       </Box>
-    </form>
+    </>
   );
 };
 
