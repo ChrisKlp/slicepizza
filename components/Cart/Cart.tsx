@@ -14,7 +14,7 @@ import {
 import formatMoney from 'lib/formatMoney';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useCart } from './CartContext';
+import { useCart } from '../../context/CartContext';
 import CartItem from './CartItem';
 
 type CartProps = {

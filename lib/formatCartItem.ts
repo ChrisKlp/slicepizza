@@ -1,4 +1,4 @@
-import { TCartItem } from 'components/Cart/CartContext';
+import { TCartItem } from 'context/CartContext';
 import { AllPizzas_pizzas } from 'types/AllPizzas';
 import { Hero_hero_pizza } from 'types/Hero';
 

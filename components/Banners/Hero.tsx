@@ -2,7 +2,7 @@ import { Box, Button, Flex, Heading, VStack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { Hero as THero } from 'types/Hero';
 import { FiShoppingCart } from 'react-icons/fi';
-import { useCart } from 'components/Cart/CartContext';
+import { useCart } from 'context/CartContext';
 import formatCartItem from 'lib/formatCartItem';
 
 type HeroProps = {

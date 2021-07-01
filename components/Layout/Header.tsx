@@ -10,7 +10,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import Cart from 'components/Cart/Cart';
-import { useCart } from 'components/Cart/CartContext';
+import { useCart } from 'context/CartContext';
 import { LOGO } from 'lib/queries';
 import Image from 'next/image';
 import Link from 'next/link';

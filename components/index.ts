@@ -3,3 +3,5 @@ export { default as Hero } from 'components/Banners/Hero';
 export { default as FooterBanner } from 'components/Banners/FooterBanner';
 export { default as PizzaList } from 'components/PizzaList/PizzaList';
 export { default as Cart } from 'components/Cart/Cart';
+export { default as CheckoutForm } from 'components/Checkout/CheckoutForm';
+export { default as CheckoutList } from 'components/Checkout/CheckoutList';

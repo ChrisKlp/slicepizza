@@ -11,7 +11,7 @@ import {
 import { AllPizzas_pizzas } from 'types/AllPizzas';
 import Image from 'next/image';
 import formatMoney from 'lib/formatMoney';
-import { useCart } from 'components/Cart/CartContext';
+import { useCart } from 'context/CartContext';
 import formatCartItem from 'lib/formatCartItem';
 
 type PizzaCardProps = {

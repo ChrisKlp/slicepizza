@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import Image from 'next/image';
-import { TCartItem, useCart } from './CartContext';
+import { TCartItem, useCart } from '../../context/CartContext';
 import formatMoney from 'lib/formatMoney';
 import { RiCloseLine } from 'react-icons/ri';
 import { BiPlus, BiMinus } from 'react-icons/bi';

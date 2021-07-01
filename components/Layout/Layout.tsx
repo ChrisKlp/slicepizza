@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { CartProvider } from 'components/Cart/CartContext';
+import { CartProvider } from 'context/CartContext';
 import React from 'react';
 import Footer from './Footer';
 import Header from './Header';

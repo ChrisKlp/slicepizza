@@ -43,6 +43,11 @@ export default extendTheme({
         colorScheme: 'red',
       },
     },
+    FormLabel: {
+      baseStyle: {
+        fontSize: 'sm',
+      },
+    },
   },
   breakpoints,
 });
