@@ -7,25 +7,31 @@ import {
   Text,
   Button,
   Divider,
+  useToast,
 } from '@chakra-ui/react';
 import { AllPizzas_pizzas } from 'types/AllPizzas';
 import Image from 'next/image';
 import formatMoney from 'lib/formatMoney';
 import { useCart } from 'context/CartContext';
 import formatCartItem from 'lib/formatCartItem';
+import toasts from 'lib/toasts';
 
 type PizzaCardProps = {
   data: AllPizzas_pizzas;
 };
 
 const PizzaCard: React.FC<PizzaCardProps> = ({ data }) => {
+  const toast = useToast();
   const { addToCart, incrementQuantity, state } = useCart();
 
   const existingItem = state.items.find(item => item.id === data.id);
 
   const handleAddClick = () => {
+    toast(toasts.add);
+
     if (existingItem) {
-      return incrementQuantity(data.id);
+      incrementQuantity(data.id);
+      return;
     }
 
     const item = formatCartItem(data);

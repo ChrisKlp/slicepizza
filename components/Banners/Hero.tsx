@@ -1,15 +1,25 @@
-import { Box, Button, Flex, Heading, VStack, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  VStack,
+  Text,
+  useToast,
+} from '@chakra-ui/react';
 import React from 'react';
 import { Hero as THero } from 'types/Hero';
 import { FiShoppingCart } from 'react-icons/fi';
 import { useCart } from 'context/CartContext';
 import formatCartItem from 'lib/formatCartItem';
+import toasts from 'lib/toasts';
 
 type HeroProps = {
   data: THero;
 };
 
 const Hero: React.FC<HeroProps> = ({ data }) => {
+  const toast = useToast();
   const { addToCart, incrementQuantity, state } = useCart();
 
   const existingItem = state.items.find(
@@ -18,6 +28,8 @@ const Hero: React.FC<HeroProps> = ({ data }) => {
 
   const handleAddClick = () => {
     if (!data?.hero?.pizza) return;
+
+    toast(toasts.add);
 
     if (existingItem) {
       return incrementQuantity(data.hero.pizza.id);

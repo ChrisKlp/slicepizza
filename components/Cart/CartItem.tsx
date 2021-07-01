@@ -62,7 +62,7 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
               aria-label="decrement item counter"
               rounded={6}
               size="sm"
-              disabled={data.quantity >= 10}
+              disabled={data.quantity >= 99}
               onClick={() => incrementQuantity(data.id)}
             />
           </HStack>
