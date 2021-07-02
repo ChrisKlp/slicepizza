@@ -18,3 +18,16 @@ export const formSchema = yup.object().shape({
   code: yup.string().required(requiredMessage),
   city: yup.string().required(requiredMessage),
 });
+
+export type TAuthInputs = {
+  email: string;
+  password: string;
+};
+
+export const authSchema = yup.object().shape({
+  email: yup.string().email('Input a valid email').required(requiredMessage),
+  password: yup
+    .string()
+    .min(8, 'Use at least 8 characters')
+    .required(requiredMessage),
+});

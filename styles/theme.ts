@@ -38,6 +38,7 @@ export default extendTheme({
       baseStyle: {
         rounded: 'full',
         fontFamily: 'Josefin Sans, sans-serif',
+        lineHeight: 0,
       },
       defaultProps: {
         colorScheme: 'red',
