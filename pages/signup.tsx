@@ -1,37 +1,42 @@
+import { useMutation } from '@apollo/client';
 import {
-  Button,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  Box,
   Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   Heading,
-  Input,
-  InputGroup,
-  InputRightElement,
   Link,
   Text,
-  useBoolean,
 } from '@chakra-ui/react';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { authSchema, TAuthInputs } from 'lib/formSchema';
+import { AuthForm } from 'components';
+import { TAuthInputs } from 'lib/formSchema';
+import { REGISTER } from 'lib/mutations';
 import NextLink from 'next/link';
 import React from 'react';
-import { useForm } from 'react-hook-form';
 
 type SignupPageProps = {};
 
 const SignupPage: React.FC<SignupPageProps> = () => {
-  const [show, setShow] = useBoolean(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<TAuthInputs>({
-    resolver: yupResolver(authSchema),
-  });
+  const [handleRegister, { called, loading, data, error }] = useMutation(
+    REGISTER,
+    {
+      onCompleted({ register }) {
+        console.log(register);
+      },
+    }
+  );
 
   const onSubmit = (data: TAuthInputs) => {
-    console.log(data);
+    handleRegister({
+      variables: {
+        input: {
+          username: data.email,
+          email: data.email,
+          password: data.password,
+        },
+      },
+    });
   };
 
   return (
@@ -40,55 +45,17 @@ const SignupPage: React.FC<SignupPageProps> = () => {
       align="center"
       justify="center"
     >
-      <Flex
-        as="form"
-        onSubmit={handleSubmit(onSubmit)}
-        direction="column"
-        bg="white"
-        p={[6, 9, 12]}
-        rounded={6}
-        w="full"
-        maxW="xl"
-        noValidate
-      >
+      <Box bg="white" p={[6, 9, 12]} rounded={6} w="full" maxW="xl">
         <Heading mb={6} size="lg">
           Sign up
         </Heading>
-        <FormControl id="email" mb={6} isInvalid={!!errors.email}>
-          <FormLabel htmlFor="email">Email:</FormLabel>
-          <Input
-            placeholder="mail@example.com"
-            type="email"
-            variant="filled"
-            {...register('email')}
-          />
-          <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
-        </FormControl>
-        <FormControl id="password" mb={6} isInvalid={!!errors.password}>
-          <FormLabel htmlFor="password">Password:</FormLabel>
-          <InputGroup>
-            <Input
-              placeholder="*********"
-              type={show ? 'text' : 'password'}
-              variant="filled"
-              {...register('password')}
-            />
-            <InputRightElement width="4.5rem">
-              <Button
-                size="sm"
-                onClick={setShow.toggle}
-                colorScheme="blackAlpha"
-                variant="ghost"
-              >
-                {show ? 'Hide' : 'Show'}
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-          <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
-        </FormControl>
-        <Button type="submit" mb={6}>
-          Sign up
-        </Button>
+        {error && (
+          <Alert status="error" rounded={8} mb={5}>
+            <AlertIcon />
+            <AlertTitle mr={2}>Failed to create an account</AlertTitle>
+          </Alert>
+        )}
+        <AuthForm onSubmit={onSubmit} isLoading={called && loading} signup />
         <Text align="center" fontSize="sm">
           Already have an account?{' '}
           <NextLink href="/login" passHref>
@@ -97,7 +64,7 @@ const SignupPage: React.FC<SignupPageProps> = () => {
             </Link>
           </NextLink>
         </Text>
-      </Flex>
+      </Box>
     </Flex>
   );
 };

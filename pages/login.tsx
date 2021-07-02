@@ -1,38 +1,39 @@
+import { useMutation } from '@apollo/client';
 import {
-  Button,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  Box,
   Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   Heading,
-  Input,
-  InputGroup,
-  InputRightElement,
   Link,
   Text,
-  useBoolean,
 } from '@chakra-ui/react';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { TAuthInputs, authSchema } from 'lib/formSchema';
+import { AuthForm } from 'components';
+import { TAuthInputs } from 'lib/formSchema';
+import { LOGIN } from 'lib/mutations';
 import NextLink from 'next/link';
 import React from 'react';
-import { useForm } from 'react-hook-form';
 
 type LoginPageProps = {};
 
 const LoginPage: React.FC<LoginPageProps> = () => {
-  const [show, setShow] = useBoolean(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<TAuthInputs>({
-    resolver: yupResolver(authSchema),
+  const [handleLogin, { called, loading, data, error }] = useMutation(LOGIN, {
+    onCompleted({ login }) {
+      console.log(login);
+    },
   });
 
   const onSubmit = (data: TAuthInputs) => {
-    console.log(data);
+    handleLogin({
+      variables: {
+        input: {
+          identifier: data.email,
+          password: data.password,
+          provider: 'local',
+        },
+      },
+    });
   };
 
   return (
@@ -41,55 +42,17 @@ const LoginPage: React.FC<LoginPageProps> = () => {
       align="center"
       justify="center"
     >
-      <Flex
-        as="form"
-        onSubmit={handleSubmit(onSubmit)}
-        direction="column"
-        bg="white"
-        p={[6, 9, 12]}
-        rounded={6}
-        w="full"
-        maxW="xl"
-        noValidate
-      >
+      <Box bg="white" p={[6, 9, 12]} rounded={6} w="full" maxW="xl">
         <Heading mb={6} size="lg">
           Log in
         </Heading>
-        <FormControl id="email" mb={6} isInvalid={!!errors.email}>
-          <FormLabel htmlFor="email">Email:</FormLabel>
-          <Input
-            placeholder="mail@example.com"
-            type="email"
-            variant="filled"
-            {...register('email')}
-          />
-          <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
-        </FormControl>
-        <FormControl id="password" mb={6} isInvalid={!!errors.password}>
-          <FormLabel htmlFor="password">Password:</FormLabel>
-          <InputGroup>
-            <Input
-              placeholder="*********"
-              type={show ? 'text' : 'password'}
-              variant="filled"
-              {...register('password')}
-            />
-            <InputRightElement width="4.5rem">
-              <Button
-                size="sm"
-                onClick={setShow.toggle}
-                colorScheme="blackAlpha"
-                variant="ghost"
-              >
-                {show ? 'Hide' : 'Show'}
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-          <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
-        </FormControl>
-        <Button type="submit" mb={6}>
-          Log in
-        </Button>
+        {error && (
+          <Alert status="error" rounded={8} mb={5}>
+            <AlertIcon />
+            <AlertTitle mr={2}>Wrong email or password</AlertTitle>
+          </Alert>
+        )}
+        <AuthForm onSubmit={onSubmit} isLoading={called && loading} />
         <Text align="center" fontSize="sm">
           Need an account?{' '}
           <NextLink href="/signup" passHref>
@@ -98,7 +61,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
             </Link>
           </NextLink>
         </Text>
-      </Flex>
+      </Box>
     </Flex>
   );
 };
