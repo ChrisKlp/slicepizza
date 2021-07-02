@@ -18,14 +18,11 @@ import React from 'react';
 type SignupPageProps = {};
 
 const SignupPage: React.FC<SignupPageProps> = () => {
-  const [handleRegister, { called, loading, data, error }] = useMutation(
-    REGISTER,
-    {
-      onCompleted({ register }) {
-        console.log(register);
-      },
-    }
-  );
+  const [handleRegister, { called, loading, error }] = useMutation(REGISTER, {
+    onCompleted({ register }) {
+      console.log(register);
+    },
+  });
 
   const onSubmit = (data: TAuthInputs) => {
     handleRegister({

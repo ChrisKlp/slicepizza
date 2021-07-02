@@ -60,3 +60,13 @@ export const ALL_PIZZAS = gql`
     }
   }
 `;
+
+export const CURRENT_USER = gql`
+  query CurrentUser {
+    me {
+      id
+      username
+      email
+    }
+  }
+`;

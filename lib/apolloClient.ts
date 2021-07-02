@@ -7,10 +7,11 @@ import {
   NormalizedCacheObject,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
+import { setContext } from '@apollo/client/link/context';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-function createApolloClient() {
+function createApolloClient(token?: string) {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: ApolloLink.from([
@@ -26,6 +27,14 @@ function createApolloClient() {
             `[Network error]: ${networkError}. Backend is unreachable. Is it running?`
           );
       }),
+      setContext((_, { headers }) => {
+        return {
+          headers: {
+            ...headers,
+            authorization: token ? `Bearer ${token}` : '',
+          },
+        };
+      }),
       new HttpLink({
         uri:
           process.env.NODE_ENV === 'development'
@@ -38,8 +47,11 @@ function createApolloClient() {
   });
 }
 
-export function initializeApollo(initialState?: NormalizedCacheObject) {
-  const _apolloClient = apolloClient ?? createApolloClient();
+export function initializeApollo(
+  initialState?: NormalizedCacheObject,
+  token?: string
+) {
+  const _apolloClient = apolloClient ?? createApolloClient(token);
 
   if (initialState) {
     const existingCache = _apolloClient.extract();
@@ -53,7 +65,10 @@ export function initializeApollo(initialState?: NormalizedCacheObject) {
   return _apolloClient;
 }
 
-export function useApollo(initialState: NormalizedCacheObject) {
-  const store = useMemo(() => initializeApollo(initialState), [initialState]);
+export function useApollo(initialState: NormalizedCacheObject, token?: string) {
+  const store = useMemo(
+    () => initializeApollo(initialState, token),
+    [initialState, token]
+  );
   return store;
 }

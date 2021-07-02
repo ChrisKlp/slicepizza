@@ -14,13 +14,20 @@ import { TAuthInputs } from 'lib/formSchema';
 import { LOGIN } from 'lib/mutations';
 import NextLink from 'next/link';
 import React from 'react';
+import { setCookie } from 'nookies';
+import { useRouter } from 'next/router';
 
 type LoginPageProps = {};
 
 const LoginPage: React.FC<LoginPageProps> = () => {
-  const [handleLogin, { called, loading, data, error }] = useMutation(LOGIN, {
+  const router = useRouter();
+  const [handleLogin, { called, loading, error }] = useMutation(LOGIN, {
     onCompleted({ login }) {
-      console.log(login);
+      setCookie(null, 'jwt', login.jwt, {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
+      router.push('/');
     },
   });
 

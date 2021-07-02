@@ -5,6 +5,7 @@ import { Logo } from 'types/Logo';
 import { Hero, FooterBanner, PizzaList } from 'components';
 import { Hero as THero } from 'types/Hero';
 import { FooterBanner as TFooterBanner } from 'types/FooterBanner';
+import { GetStaticProps } from 'next';
 
 type HomePageProps = {
   pizzas: AllPizzas;
@@ -25,7 +26,7 @@ const HomePage: React.FC<HomePageProps> = props => {
 
 export default HomePage;
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const apolloClient = initializeApollo();
 
   const { data: pizzas } = await apolloClient.query({
@@ -52,4 +53,4 @@ export async function getStaticProps() {
       footerBanner,
     },
   };
-}
+};
