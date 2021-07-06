@@ -8,10 +8,10 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import Image from 'next/image';
-import { TCartItem, useCart } from '../../context/CartContext';
 import formatMoney from 'lib/formatMoney';
 import { RiCloseLine } from 'react-icons/ri';
 import { BiPlus, BiMinus } from 'react-icons/bi';
+import { TCartItem, useCart } from '../../context/CartContext';
 
 type CartItemProps = {
   data: TCartItem;
@@ -22,7 +22,7 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
   return (
     <>
       <HStack w="full">
-        <Image src={data.imageUrl} width="96px" height="96px" />
+        <Image src={data.imageUrl} width="96px" height="96px" alt="pizza img" />
         <Box flexGrow={1}>
           <HStack align="flex-start" justify="space-between" w="full">
             <Box>

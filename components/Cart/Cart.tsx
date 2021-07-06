@@ -41,7 +41,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
         </DrawerHeader>
 
         <DrawerBody>
-          {state.items.map(item => (
+          {state.items.map((item) => (
             <CartItem key={item.id} data={item} />
           ))}
         </DrawerBody>

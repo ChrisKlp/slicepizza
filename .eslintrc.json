@@ -8,6 +8,7 @@
     "airbnb-typescript",
     "plugin:@typescript-eslint/recommended",
     "next",
+    "prettier",
     "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
@@ -29,6 +30,9 @@
     "@typescript-eslint/ban-types": "warn",
     "@typescript-eslint/no-empty-interface": "off",
     "react/jsx-props-no-spreading": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "no-underscore-dangle": "off"
   }
 }

@@ -1,17 +1,8 @@
-import {
-  HStack,
-  Box,
-  Heading,
-  IconButton,
-  Text,
-  Divider,
-} from '@chakra-ui/react';
-import React from 'react';
-import Image from 'next/image';
+import { Box, Divider, Heading, HStack, Text } from '@chakra-ui/react';
+import { TCartItem } from 'context/CartContext';
 import formatMoney from 'lib/formatMoney';
-import { RiCloseLine } from 'react-icons/ri';
-import { BiPlus, BiMinus } from 'react-icons/bi';
-import { useCart, TCartItem } from 'context/CartContext';
+import Image from 'next/image';
+import React from 'react';
 
 type CheckoutItemProps = {
   data: TCartItem;
@@ -27,6 +18,7 @@ const CheckoutItem: React.FC<CheckoutItemProps> = ({ data, order }) => {
             src={data.imageUrl}
             width={order ? '45px' : '96px'}
             height={order ? '45px' : '96px'}
+            alt="pizza img"
           />
         </Box>
         <Box pt={order ? 0 : 2} flexGrow={1}>

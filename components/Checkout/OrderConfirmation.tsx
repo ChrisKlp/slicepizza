@@ -48,7 +48,7 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
         </ModalHeader>
         <ModalBody>
           <Box mb={6}>
-            {data.items.map(item => (
+            {data.items.map((item) => (
               <CheckoutItem key={item.id} data={item} order />
             ))}
           </Box>

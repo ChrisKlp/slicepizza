@@ -24,7 +24,7 @@ const PizzaCard: React.FC<PizzaCardProps> = ({ data }) => {
   const toast = useToast();
   const { addToCart, incrementQuantity, state } = useCart();
 
-  const existingItem = state.items.find(item => item.id === data.id);
+  const existingItem = state.items.find((item) => item.id === data.id);
 
   const handleAddClick = () => {
     toast(toasts.add);
@@ -52,7 +52,11 @@ const PizzaCard: React.FC<PizzaCardProps> = ({ data }) => {
           flexShrink={0}
           display={{ md: 'none' }}
         >
-          <Image src={data.image?.formats.thumbnail.url} layout="fill" />
+          <Image
+            src={data.image?.formats.thumbnail.url}
+            layout="fill"
+            alt="pizza img"
+          />
         </Box>
         <Box
           position="relative"
@@ -62,7 +66,9 @@ const PizzaCard: React.FC<PizzaCardProps> = ({ data }) => {
           mb={2}
           display={{ base: 'none', md: 'block' }}
         >
-          {data.image?.url && <Image src={data.image.url} layout="fill" />}
+          {data.image?.url && (
+            <Image src={data.image.url} layout="fill" alt="pizza img" />
+          )}
         </Box>
         <Grid
           ml={[2, null, 0]}

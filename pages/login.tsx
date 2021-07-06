@@ -12,16 +12,14 @@ import {
 import { AuthForm } from 'components';
 import { TAuthInputs } from 'lib/formSchema';
 import { LOGIN } from 'lib/mutations';
-import NextLink from 'next/link';
-import React from 'react';
-import { setCookie } from 'nookies';
-import { useRouter } from 'next/router';
-import { Login } from 'types/Login';
 import { CURRENT_USER } from 'lib/queries';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import { setCookie } from 'nookies';
+import React from 'react';
+import { Login } from 'types/Login';
 
-type LoginPageProps = {};
-
-const LoginPage: React.FC<LoginPageProps> = props => {
+const LoginPage: React.FC = () => {
   const router = useRouter();
   const [handleLogin, { called, loading, error }] = useMutation<Login>(LOGIN, {
     onCompleted({ login }) {

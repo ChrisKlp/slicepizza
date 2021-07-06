@@ -10,13 +10,9 @@ import { onError } from '@apollo/client/link/error';
 import { parseCookies } from 'nookies';
 import { useMemo } from 'react';
 
-let apolloClient: ApolloClient<NormalizedCacheObject>;
+let globalApolloClient: ApolloClient<NormalizedCacheObject>;
 
 const httpLink = new HttpLink({
-  // uri:
-  //   process.env.NODE_ENV === 'development'
-  //     ? 'http://localhost:1337/graphql'
-  //     : process.env.NEXT_PUBLIC_ENDPOINT,
   uri: process.env.NEXT_PUBLIC_ENDPOINT,
   credentials: 'same-origin',
 });
@@ -60,18 +56,18 @@ export const initializeApollo = (
   initialState?: NormalizedCacheObject,
   token?: string
 ) => {
-  const _apolloClient = apolloClient ?? createApolloClient(token);
+  const apolloClient = globalApolloClient ?? createApolloClient(token);
 
   if (initialState) {
-    const existingCache = _apolloClient.extract();
+    const existingCache = apolloClient.extract();
 
-    _apolloClient.cache.restore({ ...existingCache, ...initialState });
+    apolloClient.cache.restore({ ...existingCache, ...initialState });
   }
-  if (typeof window === 'undefined') return _apolloClient;
+  if (typeof window === 'undefined') return apolloClient;
 
-  if (!apolloClient) apolloClient = _apolloClient;
+  if (!globalApolloClient) globalApolloClient = apolloClient;
 
-  return _apolloClient;
+  return apolloClient;
 };
 
 export const useApollo = (initialState: NormalizedCacheObject) => {

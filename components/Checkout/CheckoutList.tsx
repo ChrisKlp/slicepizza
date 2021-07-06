@@ -4,9 +4,7 @@ import formatMoney from 'lib/formatMoney';
 import React from 'react';
 import CheckoutItem from './CheckoutItem';
 
-type CheckoutListProps = {};
-
-const CheckoutList: React.FC<CheckoutListProps> = () => {
+const CheckoutList: React.FC = () => {
   const { state } = useCart();
 
   return (
@@ -15,7 +13,7 @@ const CheckoutList: React.FC<CheckoutListProps> = () => {
         Cart ({state.items.length})
       </Heading>
       <Box w="full" flexGrow={1}>
-        {state.items.map(item => (
+        {state.items.map((item) => (
           <CheckoutItem key={item.id} data={item} />
         ))}
       </Box>

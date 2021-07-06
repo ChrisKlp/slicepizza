@@ -23,21 +23,22 @@ const Hero: React.FC<HeroProps> = ({ data }) => {
   const { addToCart, incrementQuantity, state } = useCart();
 
   const existingItem = state.items.find(
-    item => item.id === data.hero?.pizza?.id
+    (item) => item.id === data.hero?.pizza?.id
   );
 
-  const handleAddClick = () => {
+  function handleAddClick() {
     if (!data?.hero?.pizza) return;
 
     toast(toasts.add);
 
     if (existingItem) {
-      return incrementQuantity(data.hero.pizza.id);
+      incrementQuantity(data.hero.pizza.id);
+      return;
     }
 
     const item = formatCartItem(data.hero.pizza);
     addToCart(item);
-  };
+  }
 
   return (
     <Flex
@@ -67,7 +68,7 @@ const Hero: React.FC<HeroProps> = ({ data }) => {
         left={0}
         w="full"
         h="full"
-        bgGradient={'linear(to-b, rgba(0,0,0,0), rgba(0,0,0,0.6))'}
+        bgGradient="linear(to-b, rgba(0,0,0,0), rgba(0,0,0,0.6))"
         zIndex={-1}
         display={{ lg: 'none' }}
       />

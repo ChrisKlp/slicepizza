@@ -57,12 +57,12 @@ const reducer: React.Reducer<TState, TAction> = (state, action) => {
     case 'REMOVE_ITEM':
       return {
         ...state,
-        items: state.items.filter(item => item.id !== action.payload),
+        items: state.items.filter((item) => item.id !== action.payload),
       };
     case 'INCREMENT':
       return {
         ...state,
-        items: state.items.map(item => {
+        items: state.items.map((item) => {
           if (item.id === action.payload) {
             return { ...item, quantity: item.quantity + 1 };
           }
@@ -72,7 +72,7 @@ const reducer: React.Reducer<TState, TAction> = (state, action) => {
     case 'DECREMENT':
       return {
         ...state,
-        items: state.items.map(item => {
+        items: state.items.map((item) => {
           if (item.id === action.payload) {
             return { ...item, quantity: item.quantity - 1 };
           }
@@ -103,7 +103,7 @@ export const CartProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     calculateTotal();
-  }, [state.items]);
+  }, [calculateTotal, state.items]);
 
   const addToCart = useCallback(
     (item: TCartItem) => {

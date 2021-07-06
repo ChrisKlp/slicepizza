@@ -1,16 +1,11 @@
 import { useApolloClient } from '@apollo/client';
 import { Box, Button, Container, Heading } from '@chakra-ui/react';
-import { initializeApollo } from 'lib/apolloClient';
-import { CURRENT_USER } from 'lib/queries';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import nookies, { destroyCookie } from 'nookies';
 import React from 'react';
-import { CurrentUser } from 'types/CurrentUser';
 
-type ProfilePageProps = {};
-
-const ProfilePage: React.FC<ProfilePageProps> = props => {
+const ProfilePage: React.FC = () => {
   const router = useRouter();
   const client = useApolloClient();
 
@@ -34,8 +29,8 @@ const ProfilePage: React.FC<ProfilePageProps> = props => {
 
 export default ProfilePage;
 
-export const getServerSideProps: GetServerSideProps = async ctx => {
-  const jwt = nookies.get(ctx).jwt;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { jwt } = nookies.get(ctx);
 
   if (!jwt) {
     return {

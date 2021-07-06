@@ -33,7 +33,7 @@ const PizzaList: React.FC<PizzaListProps> = ({ data }) => {
         spacing={{ md: '30px' }}
       >
         {data.pizzas?.map(
-          pizza => pizza && <PizzaCard key={pizza?.id} data={pizza} />
+          (pizza) => pizza && <PizzaCard key={pizza?.id} data={pizza} />
         )}
       </SimpleGrid>
     </Box>

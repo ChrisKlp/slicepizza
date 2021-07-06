@@ -18,9 +18,7 @@ import { setCookie } from 'nookies';
 import React from 'react';
 import { Register } from 'types/Register';
 
-type SignupPageProps = {};
-
-const SignupPage: React.FC<SignupPageProps> = () => {
+const SignupPage: React.FC = () => {
   const router = useRouter();
 
   const [handleRegister, { called, loading, error }] = useMutation<Register>(

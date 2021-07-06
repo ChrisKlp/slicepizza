@@ -1,18 +1,11 @@
+import { FooterBanner, Hero, PizzaList } from 'components';
 import { initializeApollo } from 'lib/apolloClient';
-import {
-  ALL_PIZZAS,
-  CURRENT_USER,
-  FOOTER_BANNER,
-  HERO,
-  LOGO,
-} from 'lib/queries';
+import { ALL_PIZZAS, FOOTER_BANNER, HERO, LOGO } from 'lib/queries';
+import { GetStaticProps } from 'next';
 import { AllPizzas } from 'types/AllPizzas';
-import { Logo } from 'types/Logo';
-import { Hero, FooterBanner, PizzaList } from 'components';
-import { Hero as THero } from 'types/Hero';
 import { FooterBanner as TFooterBanner } from 'types/FooterBanner';
-import { GetServerSideProps, GetStaticProps } from 'next';
-import { parseCookies } from 'nookies';
+import { Hero as THero } from 'types/Hero';
+import { Logo } from 'types/Logo';
 
 type HomePageProps = {
   pizzas: AllPizzas;
@@ -21,12 +14,12 @@ type HomePageProps = {
   footerBanner: TFooterBanner;
 };
 
-const HomePage: React.FC<HomePageProps> = props => {
+const HomePage: React.FC<HomePageProps> = ({ hero, pizzas, footerBanner }) => {
   return (
     <>
-      <Hero data={props.hero} />
-      <PizzaList data={props.pizzas} />
-      <FooterBanner data={props.footerBanner} />
+      <Hero data={hero} />
+      <PizzaList data={pizzas} />
+      <FooterBanner data={footerBanner} />
     </>
   );
 };

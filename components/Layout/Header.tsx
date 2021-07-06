@@ -19,9 +19,7 @@ import React from 'react';
 import { FiShoppingCart, FiUser } from 'react-icons/fi';
 import { Logo } from 'types/Logo';
 
-type NavigationProps = {};
-
-const Navigation: React.FC<NavigationProps> = () => {
+const Navigation: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { state } = useCart();
   const { data } = useQuery<Logo>(LOGO);
