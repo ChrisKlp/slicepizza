@@ -16,23 +16,28 @@ import NextLink from 'next/link';
 import React from 'react';
 import { setCookie } from 'nookies';
 import { useRouter } from 'next/router';
+import { Login } from 'types/Login';
+import { CURRENT_USER } from 'lib/queries';
 
 type LoginPageProps = {};
 
-const LoginPage: React.FC<LoginPageProps> = () => {
+const LoginPage: React.FC<LoginPageProps> = props => {
   const router = useRouter();
-  const [handleLogin, { called, loading, error }] = useMutation(LOGIN, {
+  const [handleLogin, { called, loading, error }] = useMutation<Login>(LOGIN, {
     onCompleted({ login }) {
-      setCookie(null, 'jwt', login.jwt, {
-        maxAge: 30 * 24 * 60 * 60,
-        path: '/',
-      });
+      if (login.jwt) {
+        setCookie(null, 'jwt', login.jwt, {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        });
+      }
       router.push('/');
     },
+    refetchQueries: [{ query: CURRENT_USER }],
   });
 
-  const onSubmit = (data: TAuthInputs) => {
-    handleLogin({
+  const onSubmit = async (data: TAuthInputs) => {
+    await handleLogin({
       variables: {
         input: {
           identifier: data.email,

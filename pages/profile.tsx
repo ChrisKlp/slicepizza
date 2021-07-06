@@ -1,24 +1,30 @@
-import { Container, Box, Heading, Button } from '@chakra-ui/react';
+import { useApolloClient } from '@apollo/client';
+import { Box, Button, Container, Heading } from '@chakra-ui/react';
 import { initializeApollo } from 'lib/apolloClient';
 import { CURRENT_USER } from 'lib/queries';
 import { GetServerSideProps } from 'next';
-import { parseCookies } from 'nookies';
+import { useRouter } from 'next/router';
+import nookies, { destroyCookie } from 'nookies';
 import React from 'react';
-import { destroyCookie } from 'nookies';
+import { CurrentUser } from 'types/CurrentUser';
 
-type ProfilePageProps = {
-  user: any;
-};
+type ProfilePageProps = {};
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
-  const handleLogout = () => {
+const ProfilePage: React.FC<ProfilePageProps> = props => {
+  const router = useRouter();
+  const client = useApolloClient();
+
+  const handleLogout = async () => {
+    await client.clearStore();
     destroyCookie(null, 'jwt');
+    router.push('/');
   };
+
   return (
     <Container>
       <Box bg="white" rounded={8} p={[6, 6, 8, 10, 12]}>
         <Heading mb={8} letterSpacing={-1} color="red.900" size="lg">
-          Hello User
+          Hello
         </Heading>
         <Button onClick={handleLogout}>Logout</Button>
       </Box>
@@ -29,13 +35,18 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
 export default ProfilePage;
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-  const jwt = parseCookies(ctx).jwt;
+  const jwt = nookies.get(ctx).jwt;
 
-  const apolloClient = initializeApollo(undefined, jwt);
-
-  const { data } = await apolloClient.query({ query: CURRENT_USER });
+  if (!jwt) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
 
   return {
-    props: { user: data.me },
+    props: {},
   };
 };

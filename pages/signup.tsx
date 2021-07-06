@@ -13,19 +13,33 @@ import { AuthForm } from 'components';
 import { TAuthInputs } from 'lib/formSchema';
 import { REGISTER } from 'lib/mutations';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import { setCookie } from 'nookies';
 import React from 'react';
+import { Register } from 'types/Register';
 
 type SignupPageProps = {};
 
 const SignupPage: React.FC<SignupPageProps> = () => {
-  const [handleRegister, { called, loading, error }] = useMutation(REGISTER, {
-    onCompleted({ register }) {
-      console.log(register);
-    },
-  });
+  const router = useRouter();
 
-  const onSubmit = (data: TAuthInputs) => {
-    handleRegister({
+  const [handleRegister, { called, loading, error }] = useMutation<Register>(
+    REGISTER,
+    {
+      onCompleted({ register }) {
+        if (register.jwt) {
+          setCookie(null, 'jwt', register.jwt, {
+            maxAge: 30 * 24 * 60 * 60,
+            path: '/',
+          });
+        }
+        router.push('/');
+      },
+    }
+  );
+
+  const onSubmit = async (data: TAuthInputs) => {
+    await handleRegister({
       variables: {
         input: {
           username: data.email,

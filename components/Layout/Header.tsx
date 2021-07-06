@@ -6,12 +6,13 @@ import {
   Flex,
   HStack,
   IconButton,
-  useDisclosure,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react';
 import Cart from 'components/Cart/Cart';
 import { useCart } from 'context/CartContext';
 import { LOGO } from 'lib/queries';
+import useUser from 'lib/useUser';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -24,6 +25,7 @@ const Navigation: React.FC<NavigationProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { state } = useCart();
   const { data } = useQuery<Logo>(LOGO);
+  const { user } = useUser();
 
   return (
     <Box
@@ -61,11 +63,13 @@ const Navigation: React.FC<NavigationProps> = () => {
               <Avatar
                 as="a"
                 icon={<FiUser size={18} />}
+                name={user?.me?.email}
+                color={user?.me?.email ? 'white' : 'black'}
                 size="sm"
                 w={10}
                 h={10}
                 fontSize="12px"
-                bg="white"
+                bg={user?.me?.email ? 'yellow.500' : 'white'}
               />
             </Link>
             <Box position="relative">
