@@ -51,25 +51,23 @@ MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
   }
   pageProps.query = ctx.query;
 
-  if (typeof window === 'undefined') {
-    const { jwt } = nookies.get(ctx);
+  const { jwt } = nookies.get(ctx);
 
-    if (jwt) {
-      const apolloClient = initializeApollo();
-      await apolloClient
-        .query({
-          query: CURRENT_USER,
-          context: {
-            headers: { authorization: `Bearer ${jwt}` },
-          },
-        })
-        .then(({ data }) => {
-          user = data;
-        })
-        .catch(() => {
-          user = null;
-        });
-    }
+  if (jwt) {
+    const apolloClient = initializeApollo();
+    await apolloClient
+      .query({
+        query: CURRENT_USER,
+        context: {
+          headers: { authorization: `Bearer ${jwt}` },
+        },
+      })
+      .then(({ data }) => {
+        user = data;
+      })
+      .catch(() => {
+        user = null;
+      });
   }
 
   return { pageProps, user };
