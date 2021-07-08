@@ -10,9 +10,9 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import Cart from 'components/Cart/Cart';
+import { useAuth } from 'context/AuthContext';
 import { useCart } from 'context/CartContext';
 import { LOGO } from 'lib/queries';
-import useUser from 'lib/useUser';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -22,8 +22,8 @@ import { Logo } from 'types/Logo';
 const Navigation: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { state } = useCart();
+  const { user } = useAuth();
   const { data } = useQuery<Logo>(LOGO);
-  const { user } = useUser();
 
   return (
     <Box
@@ -57,19 +57,35 @@ const Navigation: React.FC = () => {
             )}
           </Box>
           <HStack align="center" h="full">
-            <Link href="/profile" passHref>
-              <Avatar
-                as="a"
-                icon={<FiUser size={18} />}
-                name={user?.me?.email}
-                color={user?.me?.email ? 'white' : 'black'}
-                size="sm"
-                w={10}
-                h={10}
-                fontSize="12px"
-                bg={user?.me?.email ? 'yellow.500' : 'white'}
-              />
-            </Link>
+            {user?.me ? (
+              <Link href="/profile" passHref>
+                <Avatar
+                  as="a"
+                  icon={<FiUser size={18} />}
+                  name={user?.me?.email}
+                  color="white"
+                  size="sm"
+                  w={10}
+                  h={10}
+                  fontSize="12px"
+                  bg="yellow.500"
+                />
+              </Link>
+            ) : (
+              <Link href="/profile" passHref>
+                <Avatar
+                  as="a"
+                  icon={<FiUser size={18} />}
+                  color="blackAlpha.900"
+                  size="sm"
+                  w={10}
+                  h={10}
+                  fontSize="12px"
+                  bg="white"
+                />
+              </Link>
+            )}
+
             <Box position="relative">
               <IconButton
                 icon={<FiShoppingCart />}

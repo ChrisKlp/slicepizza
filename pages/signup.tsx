@@ -10,6 +10,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { AuthForm } from 'components';
+import { useAuth } from 'context/AuthContext';
 import { TAuthInputs } from 'lib/formSchema';
 import { REGISTER } from 'lib/mutations';
 import NextLink from 'next/link';
@@ -20,6 +21,7 @@ import { Register } from 'types/Register';
 
 const SignupPage: React.FC = () => {
   const router = useRouter();
+  const { getUser } = useAuth();
 
   const [handleRegister, { called, loading, error }] = useMutation<Register>(
     REGISTER,
@@ -30,14 +32,15 @@ const SignupPage: React.FC = () => {
             maxAge: 30 * 24 * 60 * 60,
             path: '/',
           });
+          getUser(register.jwt);
         }
         router.push('/');
       },
     }
   );
 
-  const onSubmit = async (data: TAuthInputs) => {
-    await handleRegister({
+  const onSubmit = (data: TAuthInputs) => {
+    handleRegister({
       variables: {
         input: {
           username: data.email,

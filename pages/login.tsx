@@ -10,9 +10,9 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { AuthForm } from 'components';
+import { useAuth } from 'context/AuthContext';
 import { TAuthInputs } from 'lib/formSchema';
 import { LOGIN } from 'lib/mutations';
-import { CURRENT_USER } from 'lib/queries';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { setCookie } from 'nookies';
@@ -21,21 +21,27 @@ import { Login } from 'types/Login';
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
+  const { getUser } = useAuth();
+
   const [handleLogin, { called, loading, error }] = useMutation<Login>(LOGIN, {
+    onError(err) {
+      // eslint-disable-next-line no-console
+      console.log(err.message);
+    },
     onCompleted({ login }) {
       if (login.jwt) {
         setCookie(null, 'jwt', login.jwt, {
           maxAge: 30 * 24 * 60 * 60,
           path: '/',
         });
+        getUser(login.jwt);
       }
       router.push('/');
     },
-    refetchQueries: [{ query: CURRENT_USER }],
   });
 
   const onSubmit = async (data: TAuthInputs) => {
-    await handleLogin({
+    handleLogin({
       variables: {
         input: {
           identifier: data.email,

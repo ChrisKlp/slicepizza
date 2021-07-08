@@ -1,19 +1,21 @@
+/* eslint-disable no-console */
 import {
   ApolloClient,
-  ApolloLink,
   from,
   HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import { parseCookies } from 'nookies';
 import { useMemo } from 'react';
 
 let globalApolloClient: ApolloClient<NormalizedCacheObject>;
 
 const httpLink = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_ENDPOINT,
+  uri:
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:1337/graphql'
+      : process.env.NEXT_PUBLIC_ENDPOINT,
   credentials: 'same-origin',
 });
 
@@ -30,33 +32,16 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     );
 });
 
-const authMiddleware = (token?: string) =>
-  new ApolloLink((operation, forward) => {
-    if (token) {
-      operation.setContext(({ headers = {} }) => ({
-        headers: {
-          ...headers,
-          authorization: `Bearer ${token}`,
-        },
-      }));
-    }
-
-    return forward(operation);
-  });
-
-const createApolloClient = (token?: string) => {
+const createApolloClient = () => {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: from([errorLink, authMiddleware(token), httpLink]),
+    link: from([errorLink, httpLink]),
     cache: new InMemoryCache(),
   });
 };
 
-export const initializeApollo = (
-  initialState?: NormalizedCacheObject,
-  token?: string
-) => {
-  const apolloClient = globalApolloClient ?? createApolloClient(token);
+export const initializeApollo = (initialState?: NormalizedCacheObject) => {
+  const apolloClient = globalApolloClient ?? createApolloClient();
 
   if (initialState) {
     const existingCache = apolloClient.extract();
@@ -71,11 +56,6 @@ export const initializeApollo = (
 };
 
 export const useApollo = (initialState: NormalizedCacheObject) => {
-  const token = parseCookies().jwt;
-
-  const store = useMemo(
-    () => initializeApollo(initialState, token),
-    [initialState, token]
-  );
+  const store = useMemo(() => initializeApollo(initialState), [initialState]);
   return store;
 };
