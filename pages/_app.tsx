@@ -7,7 +7,7 @@ import { initializeApollo, useApollo } from 'lib/apolloClient';
 import { CURRENT_USER } from 'lib/queries';
 import type { AppContext, AppProps } from 'next/app';
 import Router from 'next/router';
-import nookies from 'nookies';
+import { parseCookies } from 'nookies';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import React from 'react';
@@ -51,7 +51,7 @@ MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
   }
   pageProps.query = ctx.query;
 
-  const { jwt } = nookies.get(ctx);
+  const { jwt } = parseCookies(ctx);
 
   if (jwt) {
     const apolloClient = initializeApollo();
