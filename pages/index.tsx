@@ -33,7 +33,9 @@ export const getStaticProps: GetStaticProps = async () => {
     query: ALL_PIZZAS,
   });
 
-  await apolloClient.query({
+  const {
+    data: { logo },
+  } = await apolloClient.query({
     query: LOGO,
   });
 
@@ -51,6 +53,7 @@ export const getStaticProps: GetStaticProps = async () => {
       pizzas,
       hero,
       footerBanner,
+      logo,
     },
   };
 };

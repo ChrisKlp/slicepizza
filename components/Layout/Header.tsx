@@ -19,7 +19,7 @@ import React from 'react';
 import { FiShoppingCart, FiUser } from 'react-icons/fi';
 import { Logo } from 'types/Logo';
 
-const Navigation: React.FC = () => {
+const Header: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { state } = useCart();
   const { user } = useAuth();
@@ -119,4 +119,4 @@ const Navigation: React.FC = () => {
   );
 };
 
-export default Navigation;
+export default Header;

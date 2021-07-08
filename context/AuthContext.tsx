@@ -1,7 +1,14 @@
 import { useLazyQuery } from '@apollo/client';
 import { CURRENT_USER } from 'lib/queries';
-import { useContext, createContext, useState } from 'react';
+import {
+  useEffect,
+  useContext,
+  createContext,
+  useState,
+  useCallback,
+} from 'react';
 import { CurrentUser } from 'types/CurrentUser';
+import { parseCookies } from 'nookies';
 
 type TAuthContext = {
   user: CurrentUser | null;
@@ -16,15 +23,9 @@ export const useAuth = () => {
   return useContext(AuthContext) as TAuthContext;
 };
 
-type AuthProviderProps = {
-  currentUser: CurrentUser | null;
-};
-
-export const AuthProvider: React.FC<AuthProviderProps> = ({
-  children,
-  currentUser,
-}) => {
-  const [user, setUser] = useState<CurrentUser | null>(currentUser);
+export const AuthProvider: React.FC = ({ children }) => {
+  const [user, setUser] = useState<CurrentUser | null>();
+  const { jwt } = parseCookies();
 
   const [getUserQuery] = useLazyQuery<CurrentUser>(CURRENT_USER, {
     onError() {
@@ -37,13 +38,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 
   const logoutUser = () => setUser(null);
 
-  const getUser = (token: string) => {
-    getUserQuery({
-      context: {
-        headers: { authorization: `Bearer ${token}` },
-      },
-    });
-  };
+  const getUser = useCallback(
+    (token: string) => {
+      getUserQuery({
+        context: {
+          headers: { authorization: `Bearer ${token}` },
+        },
+      });
+    },
+    [getUserQuery]
+  );
+
+  useEffect(() => {
+    if (!jwt) {
+      return;
+    }
+
+    getUser(jwt);
+  }, [getUser, jwt]);
 
   return (
     <AuthContext.Provider
