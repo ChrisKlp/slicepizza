@@ -28,6 +28,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   const { jwt } = parseCookies();
 
   const [getUserQuery] = useLazyQuery<CurrentUser>(CURRENT_USER, {
+    fetchPolicy: 'network-only',
     onError() {
       setUser(null);
     },
@@ -53,7 +54,6 @@ export const AuthProvider: React.FC = ({ children }) => {
     if (!jwt) {
       return;
     }
-
     getUser(jwt);
   }, [getUser, jwt]);
 
