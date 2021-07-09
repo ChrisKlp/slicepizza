@@ -6,14 +6,13 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { TInitialFormValues } from 'lib/formatInitialFormValues';
-import { TFormInputs } from 'lib/formSchema';
 import React from 'react';
 import { DeepMap, FieldError, UseFormRegister } from 'react-hook-form';
 
 type FormInputProps = {
   register: UseFormRegister<TInitialFormValues>;
   errors: DeepMap<TInitialFormValues, FieldError>;
-  name: keyof TFormInputs;
+  name: keyof TInitialFormValues;
   placeholder: string;
   type: string;
   label: string;
