@@ -3,7 +3,7 @@ import * as yup from 'yup';
 export type TFormInputs = {
   name: string;
   email: string;
-  phone: number;
+  phone: string;
   address: string;
   code: string;
   city: string;

@@ -21,7 +21,7 @@ import { Register } from 'types/Register';
 
 const SignupPage: React.FC = () => {
   const router = useRouter();
-  const { getUser } = useAuth();
+  const { getUser, loading: authLoading } = useAuth();
 
   const [handleRegister, { called, loading, error }] = useMutation<Register>(
     REGISTER,
@@ -67,7 +67,11 @@ const SignupPage: React.FC = () => {
             <AlertTitle mr={2}>Failed to create an account</AlertTitle>
           </Alert>
         )}
-        <AuthForm onSubmit={onSubmit} isLoading={called && loading} signup />
+        <AuthForm
+          onSubmit={onSubmit}
+          isLoading={(called && loading) || authLoading}
+          signup
+        />
         <Text align="center" fontSize="sm">
           Already have an account?{' '}
           <NextLink href="/login" passHref>

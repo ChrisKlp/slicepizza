@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client';
 import {
   Avatar,
   Box,
@@ -12,18 +11,15 @@ import {
 import Cart from 'components/Cart/Cart';
 import { useAuth } from 'context/AuthContext';
 import { useCart } from 'context/CartContext';
-import { LOGO } from 'lib/queries';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { FiShoppingCart, FiUser } from 'react-icons/fi';
-import { Logo } from 'types/Logo';
 
 const Header: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { state } = useCart();
   const { user } = useAuth();
-  const { data } = useQuery<Logo>(LOGO);
 
   return (
     <Box
@@ -43,18 +39,16 @@ const Header: React.FC = () => {
             w={['140px', null, '208px']}
             position="relative"
           >
-            {data?.logo?.image?.url && (
-              <Link href="/">
-                <a>
-                  <Image
-                    src={data.logo.image.url}
-                    alt="Logo Slice Pizza"
-                    layout="fill"
-                    objectFit="contain"
-                  />
-                </a>
-              </Link>
-            )}
+            <Link href="/">
+              <a>
+                <Image
+                  src="/images/slice-pizza-logo.png"
+                  alt="Logo Slice Pizza"
+                  layout="fill"
+                  objectFit="contain"
+                />
+              </a>
+            </Link>
           </Box>
           <HStack align="center" h="full">
             {user?.me ? (

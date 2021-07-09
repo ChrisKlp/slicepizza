@@ -1,6 +1,6 @@
 import { FooterBanner, Hero, PizzaList } from 'components';
 import { initializeApollo } from 'lib/apolloClient';
-import { ALL_PIZZAS, FOOTER_BANNER, HERO, LOGO } from 'lib/queries';
+import { ALL_PIZZAS, FOOTER_BANNER, HERO } from 'lib/queries';
 import { GetStaticProps } from 'next';
 import { AllPizzas } from 'types/AllPizzas';
 import { FooterBanner as TFooterBanner } from 'types/FooterBanner';
@@ -33,12 +33,6 @@ export const getStaticProps: GetStaticProps = async () => {
     query: ALL_PIZZAS,
   });
 
-  const {
-    data: { logo },
-  } = await apolloClient.query({
-    query: LOGO,
-  });
-
   const { data: hero } = await apolloClient.query({
     query: HERO,
   });
@@ -53,7 +47,6 @@ export const getStaticProps: GetStaticProps = async () => {
       pizzas,
       hero,
       footerBanner,
-      logo,
     },
   };
 };

@@ -1,21 +1,28 @@
 import { Box, Heading, SimpleGrid } from '@chakra-ui/react';
-import { TFormInputs } from 'lib/formSchema';
+import { TInitialFormValues } from 'lib/formatInitialFormValues';
 import React from 'react';
 import { DeepMap, FieldError, UseFormRegister } from 'react-hook-form';
 import FormInput from './FormInput';
 
 type CheckoutFormProps = {
-  register: UseFormRegister<TFormInputs>;
-  errors: DeepMap<TFormInputs, FieldError>;
+  register: UseFormRegister<TInitialFormValues>;
+  errors: DeepMap<TInitialFormValues, FieldError>;
+  title?: string;
 };
 
-const CheckoutForm: React.FC<CheckoutFormProps> = ({ register, errors }) => {
+const CheckoutForm: React.FC<CheckoutFormProps> = ({
+  register,
+  errors,
+  title,
+}) => {
   return (
     <>
-      <Heading mb={8} letterSpacing={-1} color="red.900">
-        Checkout
-      </Heading>
-      <Box mb={10}>
+      {title && (
+        <Heading mb={8} letterSpacing={-1} color="red.900">
+          {title}
+        </Heading>
+      )}
+      <Box mb={10} w="full">
         <Heading
           as="h5"
           fontSize="xs"
@@ -52,7 +59,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ register, errors }) => {
           />
         </SimpleGrid>
       </Box>
-      <Box>
+      <Box w="full">
         <Heading
           as="h5"
           fontSize="xs"
@@ -82,7 +89,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ register, errors }) => {
           />
           <FormInput
             label="City"
-            placeholder="Bialystok"
+            placeholder="Warsaw"
             type="text"
             name="city"
             register={register}

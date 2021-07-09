@@ -1,12 +1,14 @@
 /* eslint-disable no-console */
 import {
   ApolloClient,
+  ApolloLink,
   from,
   HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
+import { parseCookies } from 'nookies';
 import { useMemo } from 'react';
 
 let globalApolloClient: ApolloClient<NormalizedCacheObject>;
@@ -32,10 +34,25 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     );
 });
 
+const authMiddleware = new ApolloLink((operation, forward) => {
+  const token = parseCookies().jwt;
+
+  if (token) {
+    operation.setContext(({ headers = {} }) => ({
+      headers: {
+        ...headers,
+        authorization: `Bearer ${token}`,
+      },
+    }));
+  }
+
+  return forward(operation);
+});
+
 const createApolloClient = () => {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: from([errorLink, httpLink]),
+    link: from([errorLink, authMiddleware, httpLink]),
     cache: new InMemoryCache(),
   });
 };

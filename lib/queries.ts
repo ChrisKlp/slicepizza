@@ -70,3 +70,18 @@ export const CURRENT_USER = gql`
     }
   }
 `;
+
+export const USER_INFO = gql`
+  query UserInfo($id: ID!) {
+    user(id: $id) {
+      id
+      personal {
+        name
+        phone
+        address
+        code
+        city
+      }
+    }
+  }
+`;

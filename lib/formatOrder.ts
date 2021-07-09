@@ -1,16 +1,16 @@
 import { TCartItem, TState } from 'context/CartContext';
-import { TFormInputs } from './formSchema';
+import { TInitialFormValues } from './formatInitialFormValues';
 
 export type TFormatOrder = {
   grandTotal: number;
   items: TCartItem[];
   shipping: number;
   total: number;
-  client: TFormInputs;
+  client: TInitialFormValues;
 };
 
 export const formatOrder = (
-  data: TFormInputs,
+  data: TInitialFormValues,
   state: TState
 ): TFormatOrder => ({
   client: data,

@@ -1,19 +1,35 @@
 import { useApolloClient } from '@apollo/client';
-import { Box, Button, Container, Heading } from '@chakra-ui/react';
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Button,
+  Container,
+  Heading,
+  Icon,
+  Text,
+} from '@chakra-ui/react';
+import ProfileForm from 'components/Profile/ProfileForm';
 import { useAuth } from 'context/AuthContext';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import nookies, { destroyCookie } from 'nookies';
 import React from 'react';
+import { BiLogOut } from 'react-icons/bi';
+import { FaRegAddressCard } from 'react-icons/fa';
+import { RiShoppingCartLine } from 'react-icons/ri';
 
 const ProfilePage: React.FC = () => {
   const router = useRouter();
   const client = useApolloClient();
-  const { logoutUser, user } = useAuth();
+  const { user, logoutUser, userInfo } = useAuth();
 
   const handleLogout = async () => {
     destroyCookie(null, 'jwt');
-    client.resetStore();
+    client.clearStore();
     await router.push('/');
     logoutUser();
   };
@@ -21,10 +37,37 @@ const ProfilePage: React.FC = () => {
   return (
     <Container>
       <Box bg="white" rounded={8} p={[6, 6, 8, 10, 12]}>
-        <Heading mb={8} letterSpacing={-1} color="red.900" size="lg">
-          Hello {user?.me?.email}
+        <Heading letterSpacing={-1} color="red.900" size="lg">
+          Profile
         </Heading>
-        <Button onClick={handleLogout}>Logout</Button>
+        <Text>Your email: {user?.me?.email}</Text>
+        <Accordion allowToggle py={8}>
+          <AccordionItem>
+            <AccordionButton py={4}>
+              <Box flex="1" textAlign="left">
+                <Icon as={RiShoppingCartLine} w={6} h={6} mr={6} />
+                Orders
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel py={8} />
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton py={4}>
+              <Box flex="1" textAlign="left">
+                <Icon as={FaRegAddressCard} w={6} h={6} mr={6} />
+                Personal Information
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel py={8}>
+              {userInfo && <ProfileForm defaultValues={userInfo} />}
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+        <Button onClick={handleLogout} leftIcon={<BiLogOut />}>
+          Logout
+        </Button>
       </Box>
     </Container>
   );
@@ -39,7 +82,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       redirect: {
         destination: '/login',
-        permanent: false,
+        permanent: true,
       },
     };
   }

@@ -1,20 +1,19 @@
 import { useLazyQuery } from '@apollo/client';
-import { CURRENT_USER } from 'lib/queries';
-import {
-  useEffect,
-  useContext,
-  createContext,
-  useState,
-  useCallback,
-} from 'react';
-import { CurrentUser } from 'types/CurrentUser';
+import formatInitialFormValues, {
+  TInitialFormValues,
+} from 'lib/formatInitialFormValues';
+import { CURRENT_USER, USER_INFO } from 'lib/queries';
 import { parseCookies } from 'nookies';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { CurrentUser } from 'types/CurrentUser';
+import { UserInfo } from 'types/UserInfo';
 
 type TAuthContext = {
   user: CurrentUser | null;
+  userInfo: TInitialFormValues | null;
+  getUser: () => void;
   logoutUser: () => void;
-  getUser: (token: string) => void;
-  isAuthenticated: boolean;
+  loading: boolean;
 };
 
 const AuthContext = createContext({});
@@ -25,41 +24,56 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<CurrentUser | null>();
+  const [userInfo, setUserInfo] = useState<TInitialFormValues | null>();
   const { jwt } = parseCookies();
 
-  const [getUserQuery] = useLazyQuery<CurrentUser>(CURRENT_USER, {
-    fetchPolicy: 'network-only',
+  const [getUser, { loading, data }] = useLazyQuery<CurrentUser>(CURRENT_USER, {
     onError() {
       setUser(null);
     },
-    onCompleted(data) {
+    onCompleted() {
       setUser(data);
     },
   });
 
-  const logoutUser = () => setUser(null);
-
-  const getUser = useCallback(
-    (token: string) => {
-      getUserQuery({
-        context: {
-          headers: { authorization: `Bearer ${token}` },
-        },
-      });
+  const [getUserInfo] = useLazyQuery<UserInfo>(USER_INFO, {
+    onError() {
+      setUserInfo(null);
     },
-    [getUserQuery]
-  );
+    onCompleted(userInfoData) {
+      if (!data?.me?.email) {
+        return;
+      }
+      setUserInfo(formatInitialFormValues(data.me.email, userInfoData));
+    },
+  });
+
+  const logoutUser = () => {
+    setUser(null);
+    setUserInfo(null);
+  };
 
   useEffect(() => {
     if (!jwt) {
       return;
     }
-    getUser(jwt);
+    getUser();
   }, [getUser, jwt]);
+
+  useEffect(() => {
+    if (!data?.me?.id) {
+      return;
+    }
+    getUserInfo({
+      variables: {
+        id: data.me.id,
+      },
+    });
+  }, [data, getUserInfo]);
 
   return (
     <AuthContext.Provider
-      value={{ user, logoutUser, getUser, isAuthenticated: !!user }}
+      value={{ user, userInfo, loading, getUser, logoutUser }}
     >
       {children}
     </AuthContext.Provider>

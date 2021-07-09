@@ -21,7 +21,7 @@ import { Login } from 'types/Login';
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
-  const { getUser } = useAuth();
+  const { getUser, loading: authLoading } = useAuth();
 
   const [handleLogin, { called, loading, error }] = useMutation<Login>(LOGIN, {
     onError(err) {
@@ -34,8 +34,8 @@ const LoginPage: React.FC = () => {
           maxAge: 30 * 24 * 60 * 60,
           path: '/',
         });
-        getUser(login.jwt);
       }
+      getUser();
       router.push('/');
     },
   });
@@ -68,7 +68,10 @@ const LoginPage: React.FC = () => {
             <AlertTitle mr={2}>Wrong email or password</AlertTitle>
           </Alert>
         )}
-        <AuthForm onSubmit={onSubmit} isLoading={called && loading} />
+        <AuthForm
+          onSubmit={onSubmit}
+          isLoading={(called && loading) || authLoading}
+        />
         <Text align="center" fontSize="sm">
           Need an account?{' '}
           <NextLink href="/signup" passHref>
