@@ -1,6 +1,7 @@
 import { Box, Button, Container, Flex, useDisclosure } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckoutForm, CheckoutList, OrderConfirmation } from 'components';
+import { useAuth } from 'context/AuthContext';
 import { useCart } from 'context/CartContext';
 import { TInitialFormValues } from 'lib/formatInitialFormValues';
 import { formatOrder, TFormatOrder } from 'lib/formatOrder';
@@ -14,6 +15,7 @@ const CheckoutPage: React.FC = () => {
   const router = useRouter();
   const [order, setOrder] = useState<TFormatOrder>();
   const { state } = useCart();
+  const { userInfo } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     register,
@@ -21,6 +23,7 @@ const CheckoutPage: React.FC = () => {
     formState: { errors },
   } = useForm<TInitialFormValues>({
     resolver: yupResolver(formSchema),
+    defaultValues: userInfo || undefined,
   });
 
   const onSubmit = (data: TInitialFormValues) => {

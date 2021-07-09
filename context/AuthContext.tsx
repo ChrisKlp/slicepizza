@@ -1,11 +1,20 @@
-import { useLazyQuery } from '@apollo/client';
+import { ApolloError, useLazyQuery, useMutation } from '@apollo/client';
 import formatInitialFormValues, {
   TInitialFormValues,
 } from 'lib/formatInitialFormValues';
+import { UPDATE_USER } from 'lib/mutations';
 import { CURRENT_USER, USER_INFO } from 'lib/queries';
 import { parseCookies } from 'nookies';
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  useCallback,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+
 import { CurrentUser } from 'types/CurrentUser';
+import { UpdateUser } from 'types/UpdateUser';
 import { UserInfo } from 'types/UserInfo';
 
 type TAuthContext = {
@@ -14,6 +23,9 @@ type TAuthContext = {
   getUser: () => void;
   logoutUser: () => void;
   loading: boolean;
+  updateUser: (id: string, inputs: TInitialFormValues) => void;
+  updateUserError: ApolloError | undefined;
+  updateUserLoading: boolean;
 };
 
 const AuthContext = createContext({});
@@ -28,6 +40,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   const { jwt } = parseCookies();
 
   const [getUser, { loading, data }] = useLazyQuery<CurrentUser>(CURRENT_USER, {
+    fetchPolicy: 'network-only',
     onError() {
       setUser(null);
     },
@@ -37,6 +50,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   });
 
   const [getUserInfo] = useLazyQuery<UserInfo>(USER_INFO, {
+    fetchPolicy: 'network-only',
     onError() {
       setUserInfo(null);
     },
@@ -44,14 +58,11 @@ export const AuthProvider: React.FC = ({ children }) => {
       if (!data?.me?.email) {
         return;
       }
-      setUserInfo(formatInitialFormValues(data.me.email, userInfoData));
+      setUserInfo(
+        formatInitialFormValues(data.me.email, userInfoData.user?.personal)
+      );
     },
   });
-
-  const logoutUser = () => {
-    setUser(null);
-    setUserInfo(null);
-  };
 
   useEffect(() => {
     if (!jwt) {
@@ -71,9 +82,65 @@ export const AuthProvider: React.FC = ({ children }) => {
     });
   }, [data, getUserInfo]);
 
+  const [
+    updateUserInfo,
+    { error: updateUserError, loading: updateUserLoading },
+  ] = useMutation<UpdateUser>(UPDATE_USER, {
+    fetchPolicy: 'no-cache',
+    onError(err) {
+      // eslint-disable-next-line no-console
+      console.log(err.message);
+    },
+    onCompleted() {
+      getUser();
+    },
+  });
+
+  const updateUser = useCallback(
+    (id: string, inputs: TInitialFormValues) => {
+      const { email, name, phone, address, code, city } = inputs;
+
+      updateUserInfo({
+        variables: {
+          input: {
+            where: {
+              id,
+            },
+            data: {
+              email,
+              username: name?.split(' ')[0],
+              personal: {
+                name,
+                phone,
+                address,
+                code,
+                city,
+              },
+            },
+          },
+        },
+      });
+    },
+    [updateUserInfo]
+  );
+
+  const logoutUser = () => {
+    setUser(null);
+    setUserInfo(null);
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, userInfo, loading, getUser, logoutUser }}
+      value={{
+        user,
+        userInfo,
+        loading,
+        getUser,
+        logoutUser,
+        updateUser,
+        updateUserError,
+        updateUserLoading,
+      }}
     >
       {children}
     </AuthContext.Provider>

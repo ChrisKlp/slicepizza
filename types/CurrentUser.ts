@@ -10,7 +10,6 @@
 export interface CurrentUser_me {
   __typename: "UsersPermissionsMe";
   id: string;
-  username: string;
   email: string;
 }
 

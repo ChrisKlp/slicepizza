@@ -1,4 +1,4 @@
-import { UserInfo } from 'types/UserInfo';
+import { UserInfo_user_personal } from 'types/UserInfo';
 
 export type TInitialFormValues = {
   email: string;
@@ -11,15 +11,15 @@ export type TInitialFormValues = {
 
 const formatInitialFormValues = (
   email: string,
-  userInfoData: UserInfo
+  userInfoData?: UserInfo_user_personal | null
 ): TInitialFormValues => {
   return {
     email,
-    name: userInfoData?.user?.personal?.name,
-    phone: userInfoData?.user?.personal?.phone,
-    address: userInfoData?.user?.personal?.address,
-    code: userInfoData?.user?.personal?.code,
-    city: userInfoData?.user?.personal?.city,
+    name: userInfoData?.name,
+    phone: userInfoData?.phone,
+    address: userInfoData?.address,
+    code: userInfoData?.code,
+    city: userInfoData?.city,
   };
 };
 

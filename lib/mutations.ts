@@ -31,6 +31,14 @@ export const UPDATE_USER = gql`
     updateUser(input: $input) {
       user {
         id
+        email
+        personal {
+          name
+          phone
+          address
+          code
+          city
+        }
       }
     }
   }

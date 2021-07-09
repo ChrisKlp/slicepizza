@@ -1,13 +1,5 @@
 import * as yup from 'yup';
 
-export type TFormInputs = {
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  code: string;
-  city: string;
-};
 const requiredMessage = 'Can’t be empty';
 
 export const formSchema = yup.object().shape({
