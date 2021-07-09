@@ -32,7 +32,7 @@ const SignupPage: React.FC = () => {
             maxAge: 30 * 24 * 60 * 60,
             path: '/',
           });
-          getUser(register.jwt);
+          getUser();
         }
         router.push('/');
       },
