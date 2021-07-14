@@ -1,19 +1,52 @@
-import { TCartItem, TState } from 'context/CartContext';
+import { TState } from 'context/CartContext';
+import { CurrentUser } from 'types/CurrentUser';
 import { TInitialFormValues } from './formatInitialFormValues';
 
+export type TPizzaOrder = {
+  __typename: string;
+  __component: string;
+  quantity: number;
+  pizza: string;
+}[];
+
 export type TFormatOrder = {
-  grandTotal: number;
-  items: TCartItem[];
+  pizzaOrder: TPizzaOrder;
   shipping: number;
   total: number;
-  client: TInitialFormValues;
+  grandTotal: number;
+  client?: TInitialFormValues;
+  users_permissions_user?: string;
 };
 
 export const formatOrder = (
   data: TInitialFormValues,
-  state: TState
-): TFormatOrder => ({
-  client: data,
-  ...state,
-  grandTotal: state.total + state.shipping,
-});
+  state: TState,
+  user?: CurrentUser | null
+): TFormatOrder => {
+  const pizzaOrder = state.items.map((item) => ({
+    __typename: 'ComponentDetailsPizzaOrder',
+    __component: 'details.pizza-order',
+    quantity: item.quantity,
+    pizza: item.id,
+  }));
+
+  const grandTotal = state.total + state.shipping;
+
+  if (user?.me?.id) {
+    return {
+      total: state.total,
+      shipping: state.shipping,
+      grandTotal,
+      users_permissions_user: user.me.id,
+      pizzaOrder,
+    };
+  }
+
+  return {
+    total: state.total,
+    shipping: state.shipping,
+    grandTotal,
+    client: data,
+    pizzaOrder,
+  };
+};

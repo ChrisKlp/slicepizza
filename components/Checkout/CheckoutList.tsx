@@ -4,7 +4,11 @@ import formatMoney from 'lib/formatMoney';
 import React from 'react';
 import CheckoutItem from './CheckoutItem';
 
-const CheckoutList: React.FC = () => {
+type CheckoutListProps = {
+  loading: boolean;
+};
+
+const CheckoutList: React.FC<CheckoutListProps> = ({ loading }) => {
   const { state } = useCart();
 
   return (
@@ -32,7 +36,13 @@ const CheckoutList: React.FC = () => {
             {formatMoney(state.total + state.shipping)}
           </Text>
         </HStack>
-        <Button type="submit" w="full" disabled={!state.items.length}>
+        <Button
+          type="submit"
+          w="full"
+          disabled={!state.items.length}
+          isLoading={loading}
+          loadingText="Sending"
+        >
           CONTINUE & PAY
         </Button>
       </VStack>

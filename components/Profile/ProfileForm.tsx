@@ -4,6 +4,7 @@ import { CheckoutForm } from 'components';
 import { useAuth } from 'context/AuthContext';
 import { TInitialFormValues } from 'lib/formatInitialFormValues';
 import { formSchema } from 'lib/formSchema';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -12,6 +13,7 @@ type ProfileFormProps = {
 };
 
 const ProfileForm: React.FC<ProfileFormProps> = ({ defaultValues }) => {
+  const router = useRouter();
   const { user, updateUser, updateUserLoading } = useAuth();
   const {
     register,
@@ -26,6 +28,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ defaultValues }) => {
     if (!user?.me?.id) return;
 
     updateUser(user.me.id, data);
+    router.push('/profile');
   };
 
   return (

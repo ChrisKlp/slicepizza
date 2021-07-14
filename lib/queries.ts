@@ -1,16 +1,5 @@
 import { gql } from '@apollo/client';
 
-export const LOGO = gql`
-  query Logo {
-    logo {
-      title
-      image {
-        url
-      }
-    }
-  }
-`;
-
 export const HERO = gql`
   query Hero {
     hero {

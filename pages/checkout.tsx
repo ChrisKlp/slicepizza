@@ -1,22 +1,35 @@
+import { useMutation } from '@apollo/client';
 import { Box, Button, Container, Flex, useDisclosure } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckoutForm, CheckoutList, OrderConfirmation } from 'components';
 import { useAuth } from 'context/AuthContext';
 import { useCart } from 'context/CartContext';
 import { TInitialFormValues } from 'lib/formatInitialFormValues';
-import { formatOrder, TFormatOrder } from 'lib/formatOrder';
+import { formatOrder } from 'lib/formatOrder';
 import { formSchema } from 'lib/formSchema';
+import { CREATE_ORDER } from 'lib/mutations';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MdKeyboardArrowLeft } from 'react-icons/md';
+import { CreateOrder } from 'types/CreateOrder';
 
 const CheckoutPage: React.FC = () => {
   const router = useRouter();
-  const [order, setOrder] = useState<TFormatOrder>();
-  const { state } = useCart();
-  const { userInfo } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [order, setOrder] = useState<CreateOrder>();
+
+  const { state } = useCart();
+  const { userInfo, user } = useAuth();
+
+  const [createOrder, { loading }] = useMutation<CreateOrder>(CREATE_ORDER, {
+    fetchPolicy: 'no-cache',
+    onCompleted(createOrderData) {
+      setOrder(createOrderData);
+      onOpen();
+    },
+  });
+
   const {
     register,
     handleSubmit,
@@ -27,8 +40,15 @@ const CheckoutPage: React.FC = () => {
   });
 
   const onSubmit = (data: TInitialFormValues) => {
-    setOrder(formatOrder(data, state));
-    onOpen();
+    const inputData = formatOrder(data, state, user);
+
+    createOrder({
+      variables: {
+        input: {
+          data: inputData,
+        },
+      },
+    });
   };
 
   return (
@@ -60,7 +80,7 @@ const CheckoutPage: React.FC = () => {
               mt={{ base: 8, lg: 0 }}
               w={{ lg: '30%' }}
             >
-              <CheckoutList />
+              <CheckoutList loading={loading} />
             </Box>
           </Flex>
         </form>

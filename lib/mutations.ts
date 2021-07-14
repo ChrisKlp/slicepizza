@@ -43,3 +43,30 @@ export const UPDATE_USER = gql`
     }
   }
 `;
+
+export const CREATE_ORDER = gql`
+  mutation CreateOrder($input: createOrderInput) {
+    createOrder(input: $input) {
+      order {
+        total
+        shipping
+        grandTotal
+        pizzaOrder {
+          ... on ComponentDetailsPizzaOrder {
+            id
+            quantity
+            pizza {
+              id
+              title
+              toppings
+              price
+              image {
+                formats
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;

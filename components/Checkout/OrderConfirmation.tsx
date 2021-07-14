@@ -11,16 +11,17 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { useCart } from 'context/CartContext';
+import formatCartItem from 'lib/formatCartItem';
 import formatMoney from 'lib/formatMoney';
-import { TFormatOrder } from 'lib/formatOrder';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { CreateOrder } from 'types/CreateOrder';
 import CheckoutItem from './CheckoutItem';
 
 type OrderConfirmationProps = {
   isOpen: boolean;
   onClose: () => void;
-  data: TFormatOrder;
+  data: CreateOrder;
 };
 
 const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
@@ -48,16 +49,27 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
         </ModalHeader>
         <ModalBody>
           <Box mb={6}>
-            {data.items.map((item) => (
-              <CheckoutItem key={item.id} data={item} order />
-            ))}
+            {data.createOrder?.order?.pizzaOrder &&
+              data.createOrder.order.pizzaOrder.map((item) => {
+                if (!item?.pizza || !item?.quantity) return null;
+
+                const checkoutItemData = formatCartItem(
+                  item.pizza,
+                  item.quantity
+                );
+
+                return (
+                  <CheckoutItem key={item?.id} data={checkoutItemData} order />
+                );
+              })}
           </Box>
           <HStack justify="space-between" w="full">
             <Heading as="p" fontSize="xl">
               TOTAL
             </Heading>
             <Heading as="p" fontSize="xl">
-              {formatMoney(data.grandTotal)}
+              {data.createOrder?.order?.grandTotal &&
+                formatMoney(data.createOrder.order.grandTotal)}
             </Heading>
           </HStack>
         </ModalBody>
