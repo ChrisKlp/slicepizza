@@ -1,6 +1,7 @@
 import { Button, Flex, Heading, VStack } from '@chakra-ui/react';
+import Link from 'next/link';
 import React from 'react';
-import { FaPizzaSlice } from 'react-icons/fa';
+import { FiUser } from 'react-icons/fi';
 import { FooterBanner as TFooterBanner } from 'types/FooterBanner';
 
 type FooterBannerProps = {
@@ -48,9 +49,11 @@ const FooterBanner: React.FC<FooterBannerProps> = ({ data }) => {
         >
           {data.footerBanner?.title}
         </Heading>
-        <Button rightIcon={<FaPizzaSlice />} px={8} h={12}>
-          Add Toppings
-        </Button>
+        <Link href="/signup" passHref>
+          <Button as="a" rightIcon={<FiUser />} px={8} h={12}>
+            Create account
+          </Button>
+        </Link>
       </VStack>
     </Flex>
   );

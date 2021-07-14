@@ -15,7 +15,7 @@ export type TFormatOrder = {
   total: number;
   grandTotal: number;
   client?: TInitialFormValues;
-  users_permissions_user?: string;
+  user?: string;
 };
 
 export const formatOrder = (
@@ -37,7 +37,7 @@ export const formatOrder = (
       total: state.total,
       shipping: state.shipping,
       grandTotal,
-      users_permissions_user: user.me.id,
+      user: user.me.id,
       pizzaOrder,
     };
   }

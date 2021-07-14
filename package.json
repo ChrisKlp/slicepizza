@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "gen": "apollo client:codegen --target typescript --outputFlat types --includes lib/*",
-    "lint": ". --ext .ts --ext.tsx"
+    "lint": "eslint . --ext .ts --ext .tsx"
   },
   "dependencies": {
     "@apollo/client": "^3.3.20",
@@ -15,6 +15,7 @@
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "@hookform/resolvers": "^2.6.0",
+    "date-fns": "^2.22.1",
     "framer-motion": "^4.1.17",
     "graphql": "^15.5.1",
     "next": "11.0.1",

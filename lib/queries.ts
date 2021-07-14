@@ -70,6 +70,28 @@ export const USER_INFO = gql`
         code
         city
       }
+      orders(sort: "createdAt:desc") {
+        id
+        createdAt
+        total
+        shipping
+        grandTotal
+        pizzaOrder {
+          ... on ComponentDetailsPizzaOrder {
+            id
+            quantity
+            pizza {
+              id
+              title
+              toppings
+              price
+              image {
+                formats
+              }
+            }
+          }
+        }
+      }
     }
   }
 `;

@@ -7,12 +7,13 @@
 // START Enums and Input Objects
 //==============================================================
 
-export interface ComponentDetailsPersonalInfoInput {
+export interface ComponentDetailsClientInput {
   name?: string | null;
-  phone?: string | null;
+  email?: string | null;
   address?: string | null;
   code?: string | null;
   city?: string | null;
+  phone?: string | null;
 }
 
 export interface InputID {
@@ -24,8 +25,8 @@ export interface OrderInput {
   shipping?: number | null;
   grandTotal?: number | null;
   pizzaOrder?: any[] | null;
-  users_permissions_user?: string | null;
-  client?: ComponentDetailsPersonalInfoInput | null;
+  client?: ComponentDetailsClientInput | null;
+  user?: string | null;
   published_at?: any | null;
   created_by?: string | null;
   updated_by?: string | null;
@@ -67,6 +68,7 @@ export interface editUserInput {
   blocked?: boolean | null;
   role?: string | null;
   personal?: editComponentDetailsPersonalInfoInput | null;
+  orders?: (string | null)[] | null;
   created_by?: string | null;
   updated_by?: string | null;
 }

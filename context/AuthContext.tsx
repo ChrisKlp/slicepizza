@@ -1,9 +1,11 @@
 import { ApolloError, useLazyQuery, useMutation } from '@apollo/client';
+import { useToast } from '@chakra-ui/react';
 import formatInitialFormValues, {
   TInitialFormValues,
 } from 'lib/formatInitialFormValues';
 import { UPDATE_USER } from 'lib/mutations';
 import { CURRENT_USER, USER_INFO } from 'lib/queries';
+import toasts from 'lib/toasts';
 import { parseCookies } from 'nookies';
 import {
   useCallback,
@@ -15,11 +17,12 @@ import {
 
 import { CurrentUser } from 'types/CurrentUser';
 import { UpdateUser } from 'types/UpdateUser';
-import { UserInfo } from 'types/UserInfo';
+import { UserInfo, UserInfo_user_orders } from 'types/UserInfo';
 
 type TAuthContext = {
   user: CurrentUser | null;
   userInfo: TInitialFormValues | null;
+  userOrders: (UserInfo_user_orders | null)[] | null;
   getUser: () => void;
   logoutUser: () => void;
   loading: boolean;
@@ -37,22 +40,35 @@ export const useAuth = () => {
 export const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<CurrentUser | null>();
   const [userInfo, setUserInfo] = useState<TInitialFormValues | null>();
+  const [userOrders, setUserOrders] = useState<
+    (UserInfo_user_orders | null)[] | null
+  >();
   const { jwt } = parseCookies();
+  const toast = useToast();
 
-  const [getUser, { loading, data }] = useLazyQuery<CurrentUser>(CURRENT_USER, {
-    fetchPolicy: 'network-only',
-    onError() {
-      setUser(null);
-    },
-    onCompleted() {
-      setUser(data);
-    },
-  });
+  const [getUserQuery, { loading, data }] = useLazyQuery<CurrentUser>(
+    CURRENT_USER,
+    {
+      fetchPolicy: 'network-only',
+      onError() {
+        setUser(null);
+      },
+      onCompleted() {
+        setUser(data);
+      },
+    }
+  );
+
+  const getUser = useCallback(() => {
+    if (!jwt) return;
+    getUserQuery();
+  }, [getUserQuery, jwt]);
 
   const [getUserInfo] = useLazyQuery<UserInfo>(USER_INFO, {
     fetchPolicy: 'network-only',
     onError() {
       setUserInfo(null);
+      setUserOrders(null);
     },
     onCompleted(userInfoData) {
       if (!data?.me?.email) {
@@ -61,26 +77,9 @@ export const AuthProvider: React.FC = ({ children }) => {
       setUserInfo(
         formatInitialFormValues(data.me.email, userInfoData.user?.personal)
       );
+      setUserOrders(userInfoData.user?.orders);
     },
   });
-
-  useEffect(() => {
-    if (!jwt) {
-      return;
-    }
-    getUser();
-  }, [getUser, jwt]);
-
-  useEffect(() => {
-    if (!data?.me?.id) {
-      return;
-    }
-    getUserInfo({
-      variables: {
-        id: data.me.id,
-      },
-    });
-  }, [data, getUserInfo]);
 
   const [
     updateUserInfo,
@@ -93,6 +92,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     },
     onCompleted() {
       getUser();
+      toast(toasts.userInfoUpdated);
     },
   });
 
@@ -129,11 +129,30 @@ export const AuthProvider: React.FC = ({ children }) => {
     setUserInfo(null);
   };
 
+  useEffect(() => {
+    if (!jwt) {
+      return;
+    }
+    getUser();
+  }, [getUser, jwt]);
+
+  useEffect(() => {
+    if (!data?.me?.id) {
+      return;
+    }
+    getUserInfo({
+      variables: {
+        id: data.me.id,
+      },
+    });
+  }, [data, getUserInfo]);
+
   return (
     <AuthContext.Provider
       value={{
         user,
         userInfo,
+        userOrders,
         loading,
         getUser,
         logoutUser,

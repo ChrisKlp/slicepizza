@@ -13,9 +13,10 @@ import { AuthForm } from 'components';
 import { useAuth } from 'context/AuthContext';
 import { TAuthInputs } from 'lib/formSchema';
 import { LOGIN } from 'lib/mutations';
+import { GetServerSideProps } from 'next';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { setCookie } from 'nookies';
+import nookies, { setCookie } from 'nookies';
 import React from 'react';
 import { Login } from 'types/Login';
 
@@ -86,3 +87,20 @@ const LoginPage: React.FC = () => {
 };
 
 export default LoginPage;
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { jwt } = nookies.get(ctx);
+
+  if (jwt) {
+    return {
+      redirect: {
+        destination: '/profile',
+        permanent: true,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

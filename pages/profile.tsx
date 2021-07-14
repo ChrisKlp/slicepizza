@@ -13,6 +13,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import ProfileForm from 'components/Profile/ProfileForm';
+import ProfileOrders from 'components/Profile/ProfileOrders';
 import { useAuth } from 'context/AuthContext';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -25,7 +26,7 @@ import { RiShoppingCartLine } from 'react-icons/ri';
 const ProfilePage: React.FC = () => {
   const router = useRouter();
   const client = useApolloClient();
-  const { user, logoutUser, userInfo } = useAuth();
+  const { user, logoutUser, userInfo, userOrders } = useAuth();
 
   const handleLogout = async () => {
     destroyCookie(null, 'jwt');
@@ -50,7 +51,22 @@ const ProfilePage: React.FC = () => {
               </Box>
               <AccordionIcon />
             </AccordionButton>
-            <AccordionPanel py={8} />
+            <AccordionPanel py={8}>
+              {userOrders && userOrders?.length > 0 ? (
+                userOrders.map((order, index) => {
+                  if (!order) return null;
+                  return (
+                    <ProfileOrders
+                      key={order?.id}
+                      data={order}
+                      index={index + 1}
+                    />
+                  );
+                })
+              ) : (
+                <Text>No orders</Text>
+              )}
+            </AccordionPanel>
           </AccordionItem>
           <AccordionItem>
             <AccordionButton py={4}>

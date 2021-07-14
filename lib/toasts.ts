@@ -2,6 +2,7 @@ import { UseToastOptions } from '@chakra-ui/react';
 
 export type TToasts = {
   add: UseToastOptions;
+  userInfoUpdated: UseToastOptions;
 };
 
 const defaultSettings: UseToastOptions = {
@@ -13,6 +14,11 @@ const defaultSettings: UseToastOptions = {
 const toasts: TToasts = {
   add: {
     title: 'Pizza added to cart',
+    status: 'success',
+    ...defaultSettings,
+  },
+  userInfoUpdated: {
+    title: 'Personal Information Updated',
     status: 'success',
     ...defaultSettings,
   },

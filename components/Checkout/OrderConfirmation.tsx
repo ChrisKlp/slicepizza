@@ -10,6 +10,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
+import { useAuth } from 'context/AuthContext';
 import { useCart } from 'context/CartContext';
 import formatCartItem from 'lib/formatCartItem';
 import formatMoney from 'lib/formatMoney';
@@ -31,10 +32,12 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
 }) => {
   const router = useRouter();
   const { cleanCart } = useCart();
+  const { getUser } = useAuth();
 
   const handleClick = () => {
     onClose();
     cleanCart();
+    getUser();
     router.push('/');
   };
 

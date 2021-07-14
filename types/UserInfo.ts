@@ -16,10 +16,42 @@ export interface UserInfo_user_personal {
   city: string | null;
 }
 
+export interface UserInfo_user_orders_pizzaOrder_pizza_image {
+  __typename: "UploadFile";
+  formats: any | null;
+}
+
+export interface UserInfo_user_orders_pizzaOrder_pizza {
+  __typename: "Pizza";
+  id: string;
+  title: string;
+  toppings: string;
+  price: number;
+  image: UserInfo_user_orders_pizzaOrder_pizza_image | null;
+}
+
+export interface UserInfo_user_orders_pizzaOrder {
+  __typename: "ComponentDetailsPizzaOrder";
+  id: string;
+  quantity: number | null;
+  pizza: UserInfo_user_orders_pizzaOrder_pizza | null;
+}
+
+export interface UserInfo_user_orders {
+  __typename: "Order";
+  id: string;
+  createdAt: any;
+  total: number | null;
+  shipping: number | null;
+  grandTotal: number | null;
+  pizzaOrder: (UserInfo_user_orders_pizzaOrder | null)[] | null;
+}
+
 export interface UserInfo_user {
   __typename: "UsersPermissionsUser";
   id: string;
   personal: UserInfo_user_personal | null;
+  orders: (UserInfo_user_orders | null)[] | null;
 }
 
 export interface UserInfo {
