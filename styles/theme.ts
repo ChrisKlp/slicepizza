@@ -24,7 +24,7 @@ export default extendTheme({
   },
   fonts: {
     heading: 'Josefin Sans, sans-serif',
-    body: 'Lato, sans-serif',
+    body: 'Manrope, sans-serif',
   },
   components: {
     Container: {
