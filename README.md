@@ -1,5 +1,5 @@
-#### Frontend movie app based on Strapi and MongoDB
-  
+#### Frontend pizza order app based on Strapi and MongoDB
+
 ## Build with
 
 This application was built with:
