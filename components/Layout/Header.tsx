@@ -13,31 +13,43 @@ import { useAuth } from 'context/AuthContext';
 import { useCart } from 'context/CartContext';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiShoppingCart, FiUser } from 'react-icons/fi';
 
 const Header: React.FC = () => {
+  const [small, setSmall] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { state } = useCart();
   const { user } = useAuth();
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', () =>
+        setSmall(window.pageYOffset > 100)
+      );
+    }
+  }, []);
+
   return (
     <Box
       as="header"
-      h={[20, null, 24]}
+      h={[20, null, small ? 16 : 24]}
       w="full"
       position="sticky"
       bg="#F6F5F1"
       top={0}
       left={0}
       zIndex="sticky"
+      boxShadow={{ md: small ? 'md' : 'none' }}
+      sx={{ transition: 'height 0.3s' }}
     >
       <Container h="full">
         <HStack justify="space-between" align="center" h="full" w="full">
           <Box
-            h={['40px', null, '60px']}
-            w={['140px', null, '208px']}
+            h={['40px', null, small ? '40px' : '60px']}
+            w={['140px', null, small ? '140px' : '208px']}
             position="relative"
+            sx={{ transition: 'height 0.3s, width 0.3s' }}
           >
             <Link href="/">
               <a>

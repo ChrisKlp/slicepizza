@@ -8,6 +8,7 @@ import { TInitialFormValues } from 'lib/formatInitialFormValues';
 import { formatOrder } from 'lib/formatOrder';
 import { formSchema } from 'lib/formSchema';
 import { CREATE_ORDER } from 'lib/mutations';
+import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -53,6 +54,7 @@ const CheckoutPage: React.FC = () => {
 
   return (
     <>
+      <NextSeo title="Slice Pizza - Checkout" />
       <Container>
         <Button
           leftIcon={<MdKeyboardArrowLeft />}

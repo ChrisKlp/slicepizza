@@ -6,7 +6,6 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "gen": "apollo client:codegen --target typescript --outputFlat types --includes lib/*",
     "lint": "eslint . --ext .ts --ext .tsx"
   },
   "dependencies": {
@@ -19,6 +18,7 @@
     "framer-motion": "^4.1.17",
     "graphql": "^15.5.1",
     "next": "11.0.1",
+    "next-seo": "^4.26.0",
     "nookies": "^2.5.2",
     "nprogress": "^0.2.0",
     "react": "17.0.2",
@@ -28,6 +28,7 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
+    "@emotion/babel-plugin": "^11.3.0",
     "@next/eslint-plugin-next": "^11.0.1",
     "@types/nprogress": "^0.2.0",
     "@types/react": "17.0.11",

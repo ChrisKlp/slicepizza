@@ -14,6 +14,7 @@ import { useAuth } from 'context/AuthContext';
 import { TAuthInputs } from 'lib/formSchema';
 import { LOGIN } from 'lib/mutations';
 import { GetServerSideProps } from 'next';
+import { NextSeo } from 'next-seo';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import nookies, { setCookie } from 'nookies';
@@ -54,35 +55,38 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <Flex
-      sx={{ minHeight: 'calc(100vh - 184px)' }}
-      align="center"
-      justify="center"
-    >
-      <Box bg="white" p={[6, 9, 12]} rounded={6} w="full" maxW="xl">
-        <Heading mb={6} size="lg">
-          Log in
-        </Heading>
-        {error && (
-          <Alert status="error" rounded={8} mb={5}>
-            <AlertIcon />
-            <AlertTitle mr={2}>Wrong email or password</AlertTitle>
-          </Alert>
-        )}
-        <AuthForm
-          onSubmit={onSubmit}
-          isLoading={(called && loading) || authLoading}
-        />
-        <Text align="center" fontSize="sm">
-          Need an account?{' '}
-          <NextLink href="/signup" passHref>
-            <Link color="red.500" fontSize="sm">
-              Sign up
-            </Link>
-          </NextLink>
-        </Text>
-      </Box>
-    </Flex>
+    <>
+      <NextSeo title="Slice Pizza - Login" />
+      <Flex
+        sx={{ minHeight: 'calc(100vh - 184px)' }}
+        align="center"
+        justify="center"
+      >
+        <Box bg="white" p={[6, 9, 12]} rounded={6} w="full" maxW="xl">
+          <Heading mb={6} size="lg">
+            Log in
+          </Heading>
+          {error && (
+            <Alert status="error" rounded={8} mb={5}>
+              <AlertIcon />
+              <AlertTitle mr={2}>Wrong email or password</AlertTitle>
+            </Alert>
+          )}
+          <AuthForm
+            onSubmit={onSubmit}
+            isLoading={(called && loading) || authLoading}
+          />
+          <Text align="center" fontSize="sm">
+            Need an account?{' '}
+            <NextLink href="/signup" passHref>
+              <Link color="red.500" fontSize="sm">
+                Sign up
+              </Link>
+            </NextLink>
+          </Text>
+        </Box>
+      </Flex>
+    </>
   );
 };
 
